@@ -1,0 +1,3 @@
+lucky:
+  path: /lucky
+  defaults: { _controller: 'api.luckyController:fetch' }

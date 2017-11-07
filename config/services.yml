@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        # automatically injects dependencies in your services
+        autowire: true
+        # automatically registers your services as commands, event subscribers, etc.
+        autoconfigure: true
+        public: true
+
+    api.luckyController:
+        class: PozytywneInicjatywy\Dashboard\UserInterface\Api\LuckyController
+        tags: ['controller.service_arguments']
