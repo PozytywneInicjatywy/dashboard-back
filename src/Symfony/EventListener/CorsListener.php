@@ -15,8 +15,6 @@ class CorsListener
         if (preg_match("/^\/api/", $route)) {
             $response = $event->getResponse();
             $response->headers->set("Access-Control-Allow-Origin", "*");
-
-            $event->setResponse($response);
         }
     }
 }
