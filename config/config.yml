@@ -7,6 +7,11 @@ framework:
         engines: ['twig']
     profiler: { only_exceptions: false }
 
+services:
+    PozytywneInicjatywy\Dashboard\Symfony\EventListener\CorsListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.response }
+
 web_profiler:
   toolbar: true
   intercept_redirects: false
