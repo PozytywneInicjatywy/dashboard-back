@@ -9,3 +9,7 @@ services:
     api.luckyController:
         class: PozytywneInicjatywy\Dashboard\UserInterface\Api\LuckyController
         tags: ['controller.service_arguments']
+
+    PozytywneInicjatywy\Dashboard\Symfony\EventListener\CorsListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.response }
