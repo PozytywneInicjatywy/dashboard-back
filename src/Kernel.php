@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PozytywneInicjatywy\Dashboard;
 
+use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Bundle\TwigBundle\TwigBundle;
@@ -24,7 +25,8 @@ class Kernel extends SymfonyKernel
     {
         $bundles = [
             new FrameworkBundle(),
-            new TwigBundle()
+            new TwigBundle(),
+            new DoctrineBundle()
         ];
 
         if ('dev' == $this->getEnvironment()) {
