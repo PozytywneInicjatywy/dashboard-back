@@ -59,11 +59,11 @@ class Kernel extends SymfonyKernel
 
     public function getCacheDir()
     {
-        return dirname(__DIR__).'/cache';
+        return dirname(__DIR__).'/var/cache';
     }
 
     public function getLogDir()
     {
-        return dirname(__DIR__).'/logs';
+        return dirname(__DIR__) . '/var/logs';
     }
 }
