@@ -1,3 +1,9 @@
 lucky:
   path: /lucky
+  methods: [GET]
   defaults: { _controller: 'api.luckyController:fetch' }
+
+timetable:
+  path: /timetable/{class}
+  methods: [GET]
+  defaults: { _controller: 'api.timetableController:fetch' }

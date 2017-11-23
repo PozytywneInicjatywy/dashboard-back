@@ -6,10 +6,35 @@ services:
         autoconfigure: true
         public: true
 
+    #
+    # Controllers
+    #
     api.luckyController:
         class: PozytywneInicjatywy\Dashboard\UserInterface\Api\LuckyController
         tags: ['controller.service_arguments']
 
+    api.timetableController:
+        class: PozytywneInicjatywy\Dashboard\UserInterface\Api\TimetableController
+        tags: ['controller.service_arguments']
+
+    #
+    # Repositories
+    #
+    repository.schoolClass:
+      class: PozytywneInicjatywy\Dashboard\Domain\SchoolClassRepository
+      factory: 'Doctrine\ORM\EntityManagerInterface:getRepository'
+      arguments:
+          - PozytywneInicjatywy\Dashboard\Domain\SchoolClass
+
+    #
+    # Query handlers
+    #
+    queryHandler.fetchTimetable:
+        class: PozytywneInicjatywy\Dashboard\Application\Query\Handler\FetchTimetableHandler
+
+    #
+    # Other
+    #
     eventListener.cors:
         class: PozytywneInicjatywy\Dashboard\Symfony\EventListener\CorsListener
         tags:
