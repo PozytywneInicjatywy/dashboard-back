@@ -3,7 +3,7 @@
 {% set activeTab = 'timetables' %}
 
 {% block timetableMenu %}
-    <div class="btn-group mr-3">
+    <div class="btn-group">
         <a href="#" class="btn btn-info">Dodaj nową klasę</a>
     </div>
 {% endblock %}
@@ -26,8 +26,8 @@
             <tbody>
                 {% for hour in lessonHours %}
                     <tr>
-                        <td>{{ hour.id }}</td>
-                        <td>{{ hour.startsAt|date('H:i') }} - {{ hour.endsAt|date('H:i') }}</td>
+                        <th scope="row">{{ hour.id }}</th>
+                        <th scope="row">{{ hour.startsAt|date('H:i') }} - {{ hour.endsAt|date('H:i') }}</th>
                         {% for i in 1..5 %}
                             {% if class.mappedLessons[i] is defined %}
                                 {% set lesson = class.mappedLessons[i] %}
