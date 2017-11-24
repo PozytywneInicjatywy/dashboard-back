@@ -6,12 +6,22 @@ admin.timetable.home:
   methods: [GET]
   defaults: { _controller: 'controller.web.timetable:home' }
 
+admin.timetable.subject.list:
+  path: /timetable/subject
+  methods: [GET]
+  defaults: { _controller: 'controller.web.timetable:listSubjects' }
+
 admin.timetable.editTimetable:
   path: /timetable/{class}
   methods: [GET]
   defaults: { _controller: 'controller.web.timetable:editTimetable' }
 
-admin.timetable.deleteLessonSubject:
+admin.timetable.saveLesson:
+  path: /timetable/{class}/{day}/{lessonHour}
+  methods: [POST]
+  defaults: { _controller: 'controller.web.timetable:saveLesson' }
+
+admin.timetable.deleteLesson:
   path: /timetable/{class}/{day}/{lessonHour}
   methods: [DELETE]
-  defaults: { _controller: 'controller.web.timetable:deleteLessonSubject' }
+  defaults: { _controller: 'controller.web.timetable:deleteLesson' }

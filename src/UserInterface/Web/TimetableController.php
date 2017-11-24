@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace PozytywneInicjatywy\Dashboard\UserInterface\Web;
 
+use PozytywneInicjatywy\Dashboard\Domain\Exception\LessonHourNotFoundException;
 use PozytywneInicjatywy\Dashboard\Domain\Exception\LessonNotFoundException;
+use PozytywneInicjatywy\Dashboard\Domain\Exception\NotFoundException;
 use PozytywneInicjatywy\Dashboard\Domain\Exception\SchoolClassNotFoundException;
+use PozytywneInicjatywy\Dashboard\Domain\Exception\SubjectNotFoundException;
+use PozytywneInicjatywy\Dashboard\Domain\Lesson;
 use PozytywneInicjatywy\Dashboard\Domain\LessonHourRepository;
 use PozytywneInicjatywy\Dashboard\Domain\LessonRepository;
 use PozytywneInicjatywy\Dashboard\Domain\SchoolClassRepository;
@@ -99,27 +103,93 @@ class TimetableController extends Controller
     }
 
     /**
+     * GET /admin/timetable/subject
+     *
      * @param Request $request
-     * @param string $class
-     * @param int $day
-     * @param int $lessonHour
      *
      * @return Response
      */
-    public function changeLessonSubject(Request $request, string $class, int $day, int $lessonHour): Response
+    public function listSubjects(Request $request): Response
     {
-        $subjects = $this->subjectRepository->all();
+        if (in_array('application/json', $request->getAcceptableContentTypes())) {
+            $subjects = $this->subjectRepository->all();
 
-        $subjects = array_map(function (Subject &$subject) {
-            $subject = [
-                'id' => $subject->getId(),
-                'name' => $subject->getName()
-            ];
-        }, $subjects);
+            $resultSubjects = [];
+            foreach ($subjects as $subject) {
+                $resultSubjects[] = [
+                    'id' => $subject->getId(),
+                    'name' => $subject->getName()
+                ];
+            };
+
+            return $this->json(['subjects' => $resultSubjects]);
+        }
+
+        return new Response('', Response::HTTP_NOT_IMPLEMENTED);
+    }
+
+    /**
+     * POST /admin/timetable/{class}/{day}/{lessonHour}
+     *
+     * @param Request $request
+     * @param string $class
+     * @param string $day
+     * @param string $lessonHour
+     *
+     * @return Response
+     */
+    public function saveLesson(Request $request, string $class, string $day, string $lessonHour): Response
+    {
+        $day = intval($day);
+        $lessonHour = intval($lessonHour);
+        $subjectId = intval($request->get('subject'));
+
+        try {
+            $class = $this->classRepository->byClassName($class);
+
+            try {
+                $lesson = $this->lessonRepository->byClassDayAndHour($class, $day, $lessonHour);
+
+                $message = 'Lesson has been successfully created.';
+            } catch (LessonNotFoundException $e) {
+                $lesson = new Lesson();
+                $lesson->setClass($class);
+                $lesson->setDayOfWeek($day);
+                $lesson->setRoom('');
+
+                $lesson->setLessonHour(
+                    $this->lessonHourRepository->byId($lessonHour)
+                );
+
+                $message = 'Lesson has been successfully updated.';
+            }
+        } catch (NotFoundException $e) {
+            throw $this->createNotFoundException();
+        }
+
+        try {
+            $subject = $this->subjectRepository->byId($subjectId);
+        } catch (SubjectNotFoundException $e) {
+            return $this->json(['error' => $e->getMessage()]);
+        }
+
+        $lesson->setSubject($subject);
+        $this->lessonRepository->save($lesson);
 
         return $this->json([
-            'subjects' => $subjects
-        ]);
+            'subjectName' => $lesson->getSubject()->getName(),
+            'saveUrl' => $this->generateUrl('admin.timetable.saveLesson', [
+                'class' => $class->getId(),
+                'day' => $day,
+                'lessonHour' => $lessonHour
+            ]),
+            'deleteUrl' => $this->generateUrl('admin.timetable.deleteLesson', [
+                'class' => $class->getId(),
+                'day' => $day,
+                'lessonHour' => $lessonHour
+            ]),
+            'hour' => $lessonHour
+        ], Response::HTTP_CREATED);
     }
 
     /**
@@ -131,7 +201,7 @@ class TimetableController extends Controller
      *
      * @return Response
      */
-    public function deleteLessonSubject(string $class, int $day, int $lessonHour): Response
+    public function deleteLesson(string $class, int $day, int $lessonHour): Response
     {
         try {
             $class = $this->classRepository->byClassName($class);
@@ -147,6 +217,12 @@ class TimetableController extends Controller
 
         $this->lessonRepository->delete($lesson);
 
-        return $this->json(['message' => 'Lesson has been successfully deleted.'], Response::HTTP_NO_CONTENT);
+        return $this->json([
+            'saveUrl' => $this->generateUrl('admin.timetable.saveLesson', [
+                'class' => $class->getName(),
+                'day' => $day,
+                'lessonHour' => $lessonHour
+            ])
+        ], Response::HTTP_OK);
     }
 }
