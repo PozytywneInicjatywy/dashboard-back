@@ -33,12 +33,23 @@ class SchoolClassRepository extends EntityRepository implements DomainSchoolClas
      */
     public function byClassName(string $name): SchoolClass
     {
-        /** @var SchoolClass|null $class */
-        $class = $this->findOneBy(['name' => $name]);
+        $class = $this
+            ->createQueryBuilder('c')
+            ->select('c', 'l', 'h', 's')
+            ->leftJoin('c.lessons', 'l', Join::WITH, 'l.class = c')
+            ->leftJoin('l.lessonHour', 'h', Join::WITH, 'l.lessonHour = h')
+            ->leftJoin('l.subject', 's', Join::WITH, 'l.subject = s')
+            ->where('c.name = :name')
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getOneOrNullResult();
 
         if (null === $class) {
             throw new SchoolClassNotFoundException();
         }
+
+        $lessonHours = $this->lessonHourRepository->all();
+        $this->fillWithMappedTimetable($class, $lessonHours);
 
         return $class;
     }
