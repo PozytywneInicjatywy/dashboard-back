@@ -6,6 +6,8 @@ namespace PozytywneInicjatywy\Dashboard\Domain;
 
 interface SchoolClassRepository
 {
+    public function setLessonHourRepository(LessonHourRepository $lessonHourRepository): void;
+
     /**
      * @param string $class
      *

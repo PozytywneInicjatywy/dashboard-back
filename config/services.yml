@@ -29,6 +29,15 @@ services:
       factory: 'Doctrine\ORM\EntityManagerInterface:getRepository'
       arguments:
           - PozytywneInicjatywy\Dashboard\Domain\SchoolClass
+      calls:
+          - method: setLessonHourRepository
+            arguments: ['@repository.lessonHour']
+
+    repository.lessonHour:
+      class: PozytywneInicjatywy\Dashboard\Domain\LessonHourRepository
+      factory: 'Doctrine\ORM\EntityManagerInterface:getRepository'
+      arguments:
+          - PozytywneInicjatywy\Dashboard\Domain\LessonHour
 
     #
     # Query handlers

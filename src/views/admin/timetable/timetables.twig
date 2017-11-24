@@ -10,7 +10,10 @@
 
 {% block timetableContent %}
     {% for class in classes %}
-        <h3 class="h4">{{ class.displayName }}</h3>
+        <div class="d-flex align-items-start mb-3">
+            <h3 class="h4">{{ class.displayName }}</h3>
+            <a href="#" class="btn btn-sm btn-outline-info ml-4">Edytuj</a>
+        </div>
         <table class="table mb-4">
             <thead>
                 <tr>
@@ -29,16 +32,7 @@
                         <th scope="row">{{ hour.id }}</th>
                         <th scope="row">{{ hour.startsAt|date('H:i') }} - {{ hour.endsAt|date('H:i') }}</th>
                         {% for i in 1..5 %}
-                            {% if class.mappedLessons[i] is defined %}
-                                {% set lesson = class.mappedLessons[i] %}
-                                {% if lesson[hour.id] is defined %}
-                                    {% set lesson = lesson[hour.id] %}
-                                {% else %}
-                                    {% set lesson = null %}
-                                {% endif %}
-                            {% else %}
-                                {% set lesson = null %}
-                            {% endif %}
+                            {% set lesson = class.mappedLessons[i][hour.id] %}
                             {% if lesson is not null %}
                                 <td>{{ lesson.subject.name }}</td>
                             {% else %}
