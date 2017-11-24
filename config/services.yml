@@ -39,6 +39,18 @@ services:
       arguments:
           - PozytywneInicjatywy\Dashboard\Domain\LessonHour
 
+    repository.lesson:
+      class: PozytywneInicjatywy\Dashboard\Domain\LessonRepository
+      factory: 'Doctrine\ORM\EntityManagerInterface:getRepository'
+      arguments:
+          - PozytywneInicjatywy\Dashboard\Domain\Lesson
+
+    repository.subject:
+      class: PozytywneInicjatywy\Dashboard\Domain\SubjectRepository
+      factory: 'Doctrine\ORM\EntityManagerInterface:getRepository'
+      arguments:
+          - PozytywneInicjatywy\Dashboard\Domain\Subject
+
     #
     # Query handlers
     #

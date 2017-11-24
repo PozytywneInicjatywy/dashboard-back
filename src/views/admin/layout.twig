@@ -8,43 +8,45 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
     </head>
     <body>
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">Pozytywne Inicjatywy Dashboard</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        {% block body %}
+            <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+                <a class="navbar-brand" href="#">Pozytywne Inicjatywy Dashboard</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <span class="navbar-text pr-2" data-toggle="tooltip" data-placement="right" title="Commit: b6eca20">v1.0.0-alpha</span>
-                <div class="navbar-nav ml-auto">
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">m.grzenkowicz</a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                          <a class="dropdown-item" href="#">Zmień hasło</a>
-                            <div class="dropdown-divider"></div>
-                          <a class="dropdown-item" href="#">Wyloguj się</a>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <span class="navbar-text pr-2" data-toggle="tooltip" data-placement="right" title="Commit: b6eca20">v1.0.0-alpha</span>
+                    <div class="navbar-nav ml-auto">
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">m.grzenkowicz</a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                              <a class="dropdown-item" href="#">Zmień hasło</a>
+                                <div class="dropdown-divider"></div>
+                              <a class="dropdown-item" href="#">Wyloguj się</a>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </nav>
+            <div class="container-fluid">
+                <div class="row">
+                    <nav class="col-md-2 border border-light border-top-0 border-bottom-0 border-left-0 p-4">
+                        <div class="list-group">
+                            <a href="{{ path('admin.timetable.home') }}" class="list-group-item list-group-item-action {{ active == 'timetable' ? 'active': '' }}">
+                                Plany lekcji
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">Inny odnośnik</a>
+                            <a href="#" class="list-group-item list-group-item-action">Coś</a>
+                        </div>
+                    </nav>
+                    <main class="col p-4">
+                        {% block content '' %}
+                    </main>
+                </div>
             </div>
-        </nav>
-        <div class="container-fluid">
-            <div class="row">
-                <nav class="col-md-2 border border-light border-top-0 border-bottom-0 border-left-0 p-4">
-                    <div class="list-group">
-                        <a href="{{ path('admin.timetable.home') }}" class="list-group-item list-group-item-action {{ active == 'timetable' ? 'active': '' }}">
-                            Plany lekcji
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action">Inny odnośnik</a>
-                        <a href="#" class="list-group-item list-group-item-action">Coś</a>
-                    </div>
-                </nav>
-                <main class="col p-4">
-                    {% block content '' %}
-                </main>
-            </div>
-        </div>
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        {% endblock %}
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
         <script>
@@ -52,5 +54,6 @@
                 $('[data-toggle="tooltip"]').tooltip();
             });
         </script>
+        {% block scripts '' %}
     </body>
 </html>

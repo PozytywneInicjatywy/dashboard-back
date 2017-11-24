@@ -1,4 +1,17 @@
+#
+# Timetable
+#
 admin.timetable.home:
   path: /timetable
   methods: [GET]
   defaults: { _controller: 'controller.web.timetable:home' }
+
+admin.timetable.editTimetable:
+  path: /timetable/{class}
+  methods: [GET]
+  defaults: { _controller: 'controller.web.timetable:editTimetable' }
+
+admin.timetable.deleteLessonSubject:
+  path: /timetable/{class}/{day}/{lessonHour}
+  methods: [DELETE]
+  defaults: { _controller: 'controller.web.timetable:deleteLessonSubject' }

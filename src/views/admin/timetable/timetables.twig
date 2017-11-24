@@ -12,7 +12,7 @@
     {% for class in classes %}
         <div class="d-flex align-items-start mb-3">
             <h3 class="h4">{{ class.displayName }}</h3>
-            <a href="#" class="btn btn-sm btn-outline-info ml-4">Edytuj</a>
+            <a href="{{ path('admin.timetable.editTimetable', {class: class.name}) }}" class="btn btn-sm btn-outline-info ml-4">Edytuj</a>
         </div>
         <table class="table mb-4">
             <thead>
@@ -31,8 +31,8 @@
                     <tr>
                         <th scope="row">{{ hour.id }}</th>
                         <th scope="row">{{ hour.startsAt|date('H:i') }} - {{ hour.endsAt|date('H:i') }}</th>
-                        {% for i in 1..5 %}
-                            {% set lesson = class.mappedLessons[i][hour.id] %}
+                        {% for day in 1..5 %}
+                            {% set lesson = class.mappedLessons[day][hour.id] %}
                             {% if lesson is not null %}
                                 <td>{{ lesson.subject.name }}</td>
                             {% else %}

@@ -7,7 +7,7 @@ namespace PozytywneInicjatywy\Dashboard\Domain;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="\PozytywneInicjatywy\Dashboard\Infrastructure\Doctrine\SubjectRepository")
  */
 class Subject
 {
