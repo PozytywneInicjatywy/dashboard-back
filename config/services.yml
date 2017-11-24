@@ -9,12 +9,16 @@ services:
     #
     # Controllers
     #
-    api.luckyController:
+    controller.api.lucky:
         class: PozytywneInicjatywy\Dashboard\UserInterface\Api\LuckyController
         tags: ['controller.service_arguments']
 
-    api.timetableController:
+    controller.api.timetable:
         class: PozytywneInicjatywy\Dashboard\UserInterface\Api\TimetableController
+        tags: ['controller.service_arguments']
+
+    controller.web.timetable:
+        class: PozytywneInicjatywy\Dashboard\UserInterface\Web\TimetableController
         tags: ['controller.service_arguments']
 
     #

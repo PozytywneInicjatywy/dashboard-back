@@ -1,3 +1,7 @@
 api:
   resource: routing_api.yml
   prefix: /api
+
+admin:
+  resource: routing_admin.yml
+  prefix: /admin

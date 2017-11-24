@@ -1,0 +1,55 @@
+{% extends '@admin/timetable/layout.twig' %}
+
+{% set activeTab = 'timetables' %}
+
+{% block timetableMenu %}
+    <div class="btn-group mr-3">
+        <a href="#" class="btn btn-info">Dodaj nową klasę</a>
+    </div>
+{% endblock %}
+
+{% block timetableContent %}
+    {% for class in classes %}
+        <h3 class="h4">{{ class.displayName }}</h3>
+        <table class="table mb-4">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Poniedziałek</th>
+                    <th>Wtorek</th>
+                    <th>Środa</th>
+                    <th>Czwartek</th>
+                    <th>Piątek</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for hour in lessonHours %}
+                    <tr>
+                        <td>{{ hour.id }}</td>
+                        <td>{{ hour.startsAt|date('H:i') }} - {{ hour.endsAt|date('H:i') }}</td>
+                        {% for i in 1..5 %}
+                            {% if class.mappedLessons[i] is defined %}
+                                {% set lesson = class.mappedLessons[i] %}
+                                {% if lesson[hour.id] is defined %}
+                                    {% set lesson = lesson[hour.id] %}
+                                {% else %}
+                                    {% set lesson = null %}
+                                {% endif %}
+                            {% else %}
+                                {% set lesson = null %}
+                            {% endif %}
+                            {% if lesson is not null %}
+                                <td>{{ lesson.subject.name }}</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="alert alert-warning">Nie ma żadnych klas!</p>
+    {% endfor %}
+{% endblock %}

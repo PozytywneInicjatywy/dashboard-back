@@ -1,0 +1,17 @@
+{% extends '@admin/layout.twig' %}
+
+{% set title = 'Plany lekcji' %}
+{% set active = 'timetable' %}
+
+{% block content %}
+    <div class="d-flex align-items-baseline mb-4">
+        <h2 class="h3 mr-auto">Plany lekcji</h2>
+        {% block timetableMenu '' %}
+        <div class="btn-group">
+            <a href="{{ path('admin.timetable.home') }}" class="btn btn-{{ activeTab == 'timetables' ? 'primary' : 'light' }}">Plany lekcji</a>
+            <a href="#" class="btn btn-{{ activeTab == 'subjects' ? 'primary' : 'light' }}">Przedmioty</a>
+            <a href="#" class="btn btn-{{ activeTab == 'lesson hours' ? 'primary' : 'light' }}">Godziny lekcyjne</a>
+        </div>
+    </div>
+    {% block timetableContent '' %}
+{% endblock %}

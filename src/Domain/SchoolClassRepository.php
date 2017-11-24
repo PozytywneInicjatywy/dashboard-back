@@ -14,4 +14,9 @@ interface SchoolClassRepository
      * @return SchoolClass
      */
     public function byClassName(string $class): SchoolClass;
+
+    /**
+     * @return array
+     */
+    public function all(): array;
 }

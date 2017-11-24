@@ -6,6 +6,7 @@ namespace PozytywneInicjatywy\Dashboard\Domain;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -43,6 +44,13 @@ class SchoolClass
      * @ORM\OneToMany(targetEntity="Lesson", mappedBy="class")
      */
     private $lessons;
+
+    /**
+     * Two dimensional array. Day of the week -> lesson hour.
+     *
+     * @var array
+     */
+    private $mappedLessons;
 
     /**
      * SchoolClass constructor.
@@ -106,5 +114,23 @@ class SchoolClass
     public function addLesson(Lesson $lesson): void
     {
         $this->lessons->add($lesson);
+    }
+
+    /**
+     * @return array
+     */
+    public function getMappedLessons(): array
+    {
+        return $this->mappedLessons;
+    }
+
+    /**
+     * @param array $mappedLessons
+     *
+     * @internal This method should be called only by this entity's repository.
+     */
+    public function setMappedLessons(array $mappedLessons)
+    {
+        $this->mappedLessons = $mappedLessons;
     }
 }

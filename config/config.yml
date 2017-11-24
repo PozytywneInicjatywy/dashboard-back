@@ -8,6 +8,12 @@ framework:
         engines: ['twig']
     profiler: { only_exceptions: false }
 
+twig:
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+    paths:
+        '%kernel.project_dir%/src/views/admin': admin
+
 doctrine:
     dbal:
         driver:   pdo_mysql

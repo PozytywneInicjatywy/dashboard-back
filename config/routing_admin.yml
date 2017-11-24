@@ -1,0 +1,4 @@
+admin.timetable.home:
+  path: /timetable
+  methods: [GET]
+  defaults: { _controller: 'controller.web.timetable:home' }
