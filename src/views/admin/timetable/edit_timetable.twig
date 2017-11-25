@@ -4,6 +4,7 @@
 
 {% block timetableTitle %}Edytuj plan lekcji klasy {{ class.displayName }}{% endblock %}
 
+{% set lessonId = 1 %}
 {% block timetableContent %}
     <table class="table mb-4 lessonsTable">
         <thead>
@@ -24,24 +25,28 @@
                 <th scope="row">{{ hour.startsAt|date('H:i') }} - {{ hour.endsAt|date('H:i') }}</th>
                 {% for day in 1..5 %}
                     {% set lesson = class.mappedLessons[day][hour.id] %}
+                    {% set lessonId = lessonId + 1 %}
                     {% if lesson is not null %}
-                        <td id="lesson-{{ hour.id * 100 + day }}">
+                        <td id="lesson-{{ lessonId }}">
                             <div class="d-flex">
                                 {{ lesson.subject.name }}
-                                <a href="#" class="text-info ml-auto saveLesson"
-                                    data-url="{{ path('admin.timetable.saveLesson', {class: class.name, day: day, lessonHour: hour.id}) }}"
-                                    data-hour="{{ hour.id }}" data-type="edit">e</a>
-                                <a href="#" class="text-danger ml-1 deleteLesson"
-                                   data-url="{{ path('admin.timetable.deleteLesson', {class: class.name, day: day, lessonHour: hour.id}) }}"
-                                   data-hour="{{ hour.id }}" data-subject="{{ lesson.subject.name }}">&times;</a>
+                                <a class="text-info ml-auto editLesson" data-hour="{{ hour.id }}" data-subject="{{ lesson.subject.name }}"
+                                    href="{{ path('admin.timetable.saveLesson', {class: class.name, day: day, lessonHour: hour.id}) }}">
+                                    e
+                                </a>
+                                <a class="text-danger ml-1 deleteLesson" data-hour="{{ hour.id }}" data-subject="{{ lesson.subject.name }}"
+                                   href="{{ path('admin.timetable.deleteLesson', {class: class.name, day: day, lessonHour: hour.id}) }}">
+                                    &times;
+                                </a>
                             </div>
                         </td>
                     {% else %}
-                        <td id="lesson-{{ hour.id * 100 + day }}">
+                        <td id="lesson-{{ lessonId }}">
                             <div class="d-flex justify-content-end">
-                                <a href="#" class="text-success saveLesson"
-                                    data-url="{{ path('admin.timetable.saveLesson', {class: class.name, day: day, lessonHour: hour.id}) }}"
-                                    data-hour="{{ hour.id }}" data-type="add">+</a>
+                                <a class="text-success addLesson" data-hour="{{ hour.id }}"
+                                    href="{{ path('admin.timetable.saveLesson', {class: class.name, day: day, lessonHour: hour.id}) }}">
+                                    +
+                                </a>
                             </div>
                         </td>
                     {% endif %}
@@ -54,52 +59,87 @@
 
 {% block scripts %}
     {{ parent() }}
-    {# Add/modify lesson stuff #}
-    <div class="modal" tabindex="-1" id="saveLessonSubjectModal">
+    <div class="modal" tabindex="-1" id="actionModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="saveLessonSubjectModal-title">Dodawanie lekcji</h5>
+                    <h5 class="modal-title" id="actionModal-title">Dodawanie lekcji</h5>
                     <button type="button" class="close" data-dismiss="modal">
                         <span>&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p id="saveLessonSubjectModal-body">Jaki przedmiot jest na tej lekcji?</p>
-                    <select id="saveLessonSubjectModal-select" class="form-control"></select>
+                    <p id="actionModal-body">Jaki przedmiot jest na tej lekcji?</p>
+                    <select id="actionModal-select" class="form-control" style="display: none;"></select>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="saveLessonSubjectModal-action">Dodaj lekcję</button>
+                    <button type="button" class="btn btn-primary" id="actionModal-action">Dodaj lekcję</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
                 </div>
             </div>
         </div>
     </div>
     <script>
-        $('.lessonsTable').on('click', '.saveLesson', function (event) {
-            event.preventDefault();
-            $('#saveLessonSubjectModal').modal('toggle', $(event.target));
+        var $lessonsTable = $('.lessonsTable');
+        $lessonsTable.on('click', '.addLesson, .editLesson, .deleteLesson', openModalFunction);
+
+        function openModalFunction(e) {
+            e.preventDefault();
+            $('#actionModal').modal('toggle', $(e.target));
+        }
+
+        var $modal = $('#actionModal');
+        var $modalTitle = $('#actionModal-title');
+        var $modalBody = $('#actionModal-body');
+        var $modalSelect = $('#actionModal-select');
+        var $modalAction = $('#actionModal-action');
+
+        // State for action
+        var ACTION_ADD = 0, ACTION_EDIT = 1, ACTION_DELETE = 2;
+        var actionState = {
+            url: null,
+            lessonId: null,
+            action: null
+        };
+
+        // Modal showing
+        $modal.on('show.bs.modal', function (e) {
+            var $link = $(e.relatedTarget);
+
+            actionState.lessonId = $link.closest('td').attr('id');
+            actionState.url = $link.attr('href');
+
+            var hour = $link.data('hour');
+            var subject = $link.data('subject');
+
+            if ($link.hasClass('addLesson')) {
+                $modalTitle.text('Dodawanie lekcji');
+                $modalBody.text('Jaki przedmiot ustawić na ' + hour + '. lekcję?');
+                $modalAction.text('Dodaj lekcję').removeClass('btn-danger').addClass('btn-success');
+
+                showLessonsSelect();
+
+                actionState.action = ACTION_ADD;
+            } else if ($link.hasClass('editLesson')) {
+                $modalTitle.text('Edycja lekcji');
+                $modalBody.text('Jaki przedmiot ustawić na ' + hour + '. lekcję?');
+                $modalAction.text('Zaktualizuj lekcję').removeClass('btn-danger').addClass('btn-success');
+
+                showLessonsSelect(subject);
+
+                actionState.action = ACTION_EDIT;
+            } else if ($link.hasClass('deleteLesson')) {
+                $modalTitle.text('Usuwanie lekcji');
+                $modalBody.text('Czy na pewno chcesz usunąć przedmiot ' + subject + ' z ' + hour + '. lekcji?');
+                $modalAction.text('Usuń lekcję').removeClass('btn-success').addClass('btn-danger');
+
+                actionState.action = ACTION_DELETE;
+            }
         });
 
-        $('#saveLessonSubjectModal').on('show.bs.modal', function (event) {
-            var $button = $(event.relatedTarget);
-            var lessonId = $button.closest('td').attr('id');
-            console.log(lessonId);
-
-            var url = $button.data('url');
-            var hour = $button.data('hour');
-            var type = $button.data('type');
-            var $action = $('#saveLessonSubjectModal-action');
-
-            if (type === 'add') {
-                $('#saveLessonSubjectModal-title').text('Dodawanie lekcji');
-                $('#saveLessonSubjectModal-body').text('Jaki przedmiot jest na ' + hour + '. lekcji?');
-                $action.text('Dodaj lekcję');
-            }
-
-            $action.attr('data-url', url);
-            $action.attr('data-type', type);
-            $action.attr('data-lesson-id', lessonId);
+        function showLessonsSelect(previousSubject) {
+            $modalSelect.show();
+            previousSubject = previousSubject || '';
 
             // Fill <select> with subjects.
             $.ajax({
@@ -108,107 +148,73 @@
                 dataType: 'json',
                 success: function (response) {
                     var subjects = response.subjects;
-                    var $select = $('#saveLessonSubjectModal-select');
 
-                    $select.html('');
+                    $modalSelect.empty();
+
+                    var previousSubjectId;
                     subjects.forEach(function (subject) {
-                        $select.append(
-                            $('<option value="' + subject.id + '">' + subject.name + '</option>')
+                        $modalSelect.append(
+                            $('<option>').val(subject.id).text(subject.name)
                         );
+
+                        if (previousSubject === subject.name) {
+                            previousSubjectId = subject.id;
+                        }
                     });
+
+                    $modalSelect.val(previousSubjectId).change();
                 }
             });
+        }
+
+        // Modal hidden
+        $modal.on('hidden.bs.modal', function () {
+            $modalSelect.hide();
+
+            // Reset state.
+            actionState = {
+                url: null,
+                lessonId: null,
+                action: null
+            };
         });
 
-        $('#saveLessonSubjectModal-action').on('click', function () {
-            var $button = $(this);
-            var url = $button.data('url');
-            var lessonId = $button.data('lesson-id');
+        $modalAction.on('click', function () {
+            console.log(actionState);
 
             $.ajax({
-                url: url,
-                type: 'POST',
+                url: actionState.url,
+                type: ACTION_DELETE === actionState.action ? 'DELETE' : 'POST',
                 data: {
-                    subject: parseInt($('#saveLessonSubjectModal-select').val())
+                    subject: parseInt($modalSelect.val())
                 },
-                dataType: 'json',
-                success: function (response) {
-                    $('#saveLessonSubjectModal').modal('hide');
-
-                    $('#' + lessonId).html(
-                        '<div class="d-flex">\n' +
-                        '    ' + response.subjectName + '\n' +
-                        '    <a href="#" class="text-info ml-auto" data-url="' + response.saveUrl + '" data-hour="' + response.hour + '" data-type="edit">e</a>\n' +
-                        '    <a href="#" class="text-danger ml-1" data-url="' + response.deleteUrl + '" data-hour="' + response.hour + '" data-subject="' + response.subjectName + '">&times;</a>\n' +
-                        '</div>'
+                dataType: 'json'
+            }).done(function (response) {
+                var $cell = $('#' + actionState.lessonId);
+                console.log(actionState.lessonId, $cell);
+                if (ACTION_DELETE === actionState.action) {
+                    $cell.empty().append(
+                        $('<div>').addClass('d-flex justify-content-end').append(
+                            $('<a>').attr('href', response.saveUrl).addClass('text-success addLesson').text('+')
+                        )
+                    );
+                } else {
+                    $cell.empty().append(
+                        $('<div>').addClass('d-flex').append(
+                            response.subjectName,
+                            $('<a>').attr('href', response.saveUrl).attr('data-hour', response.hour)
+                                .addClass('text-info ml-auto editLesson').text('e'),
+                            $('<a>').attr('href', response.deleteUrl).attr('data-hour', response.hour)
+                                .attr('data-subject', response.subjectName).addClass('text-danger ml-1 deleteLesson')
+                                .html('&times;')
+                        )
                     )
                 }
-            });
-        });
-    </script>
-    {# Delete lesson stuff #}
-    <div class="modal" tabindex="-1" id="deleteLessonModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Usuwanie lekcji</h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span>&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p id="deleteLessonModal-body" class="mb-0">Czy na pewno chcesz usunąć lekcję Matematyka z 1. lekcji?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" id="deleteLessonModal-delete">Usuń lekcję</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>
-        $('.lessonsTable').on('click', '.deleteLesson', function (event) {
-            event.preventDefault();
-            $('#deleteLessonModal').modal('toggle', $(event.target));
-        });
 
-        $('#deleteLessonModal').on('show.bs.modal', function (event) {
-            var $button = $(event.relatedTarget);
-            var lessonId = $button.closest('td').attr('id');
-            console.log(lessonId);
-
-            var url = $button.data('url');
-            var hour = $button.data('hour');
-            var subject = $button.data('subject');
-
-            $('#deleteLessonModal-body').text('Czy na pewno chcesz usunąć przedmiot ' + subject + ' z ' + hour + '. lekcji?');
-            $('#deleteLessonModal-delete').attr('data-url', url);
-            $('#deleteLessonModal-delete').attr('data-lesson-id', lessonId);
-        });
-
-        $('#deleteLessonModal-delete').on('click', function () {
-            var $button = $(this);
-            var url = $button.data('url');
-            var lessonId = $button.data('lesson-id');
-
-            $.ajax({
-                url: url,
-                type: 'DELETE',
-                dataType: 'json',
-                success: function (response) {
-                    $('#deleteLessonModal').modal('hide');
-
-                    // Empty cell
-                    $('#' + lessonId).html(
-                        '<div class="d-flex justify-content-end">\n' +
-                        '    <a href="' + response.saveUrl + '" class="text-success">+</a>\n' +
-                        '</div>'
-                    );
-                },
-                error: function (response) {
-                    alert('Błąd usuwania!');
-                    console.error('Błąd usuwania', response);
-                }
+                $lessonsTable.unbind('click').on('click', '.addLesson, .editLesson, .deleteLesson', openModalFunction);
+                $modal.modal('hide');
+            }).fail(function (response) {
+                console.error('XHR failed', response);
             });
         });
     </script>
