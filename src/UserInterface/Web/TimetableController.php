@@ -149,8 +149,6 @@ class TimetableController extends Controller
 
             try {
                 $lesson = $this->lessonRepository->byClassDayAndHour($class, $day, $lessonHour);
-
-                $message = 'Lesson has been successfully created.';
             } catch (LessonNotFoundException $e) {
                 $lesson = new Lesson();
                 $lesson->setClass($class);
@@ -160,8 +158,6 @@ class TimetableController extends Controller
                 $lesson->setLessonHour(
                     $this->lessonHourRepository->byId($lessonHour)
                 );
-
-                $message = 'Lesson has been successfully updated.';
             }
         } catch (NotFoundException $e) {
             throw $this->createNotFoundException();
@@ -179,12 +175,12 @@ class TimetableController extends Controller
         return $this->json([
             'subjectName' => $lesson->getSubject()->getName(),
             'saveUrl' => $this->generateUrl('admin.timetable.saveLesson', [
-                'class' => $class->getId(),
+                'class' => $class->getName(),
                 'day' => $day,
                 'lessonHour' => $lessonHour
             ]),
             'deleteUrl' => $this->generateUrl('admin.timetable.deleteLesson', [
-                'class' => $class->getId(),
+                'class' => $class->getName(),
                 'day' => $day,
                 'lessonHour' => $lessonHour
             ]),
