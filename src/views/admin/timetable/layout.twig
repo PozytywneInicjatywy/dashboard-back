@@ -14,11 +14,11 @@
             <a href="#" class="btn btn-{{ activeTab == 'lesson hours' ? 'primary' : 'light' }}">Godziny lekcyjne</a>
         </div>
     </div>
-    {% for message in app.flashes('messages.success') %}
-        <div class="alert alert-success">{{ message }}</div>
+    {% for message in app.session.flashBag.get('messages.success') %}
+        <div class="alert alert-success">{{ message|raw }}</div>
     {% endfor %}
-    {% for message in app.flashes('messages.error') %}
-        <div class="alert alert-danger">{{ message }}</div>
+    {% for message in app.session.flashBag.get('messages.error') %}
+        <div class="alert alert-danger">{{ message|raw }}</div>
     {% endfor %}
     {% block timetableContent '' %}
 {% endblock %}

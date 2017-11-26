@@ -19,6 +19,7 @@ use PozytywneInicjatywy\Dashboard\Domain\SubjectRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class TimetableController extends Controller
 {
@@ -233,8 +234,9 @@ class TimetableController extends Controller
         $class = new SchoolClass();
         $class->setDisplayName($request->get('displayName'));
         $class->setName($request->get('name'));
-
         $this->classRepository->save($class);
+
+        $this->addFlash('messages.success', sprintf('Pomyślnie dodano klasę <b>%s</b>.', $class->getDisplayName()));
 
         return $this->redirectToRoute('admin.timetable.class.list');
     }
@@ -277,8 +279,9 @@ class TimetableController extends Controller
 
         $class->setDisplayName($request->get('displayName'));
         $class->setName($request->get('name'));
-
         $this->classRepository->save($class);
+
+        $this->addFlash('messages.success', sprintf('Pomyślnie zaktualizowano klasę <b>%s</b>.', $class->getDisplayName()));
 
         return $this->redirectToRoute('admin.timetable.class.list');
     }
@@ -299,6 +302,8 @@ class TimetableController extends Controller
         }
 
         $this->classRepository->delete($class);
+
+        $this->addFlash('messages.success', 'Pomyślnie usunięto klasę <b>%s</b>.', $class->getDisplayName());
 
         return $this->redirectToRoute('admin.timetable.class.list');
     }
@@ -346,13 +351,15 @@ class TimetableController extends Controller
      *
      * @return Response
      */
-    public function newSubjectPost(Request $request): Response
+    public function newSubjectPost(Request $request, Session $session): Response
     {
         // TODO: Validation stuff
 
         $subject = new Subject();
         $subject->setName($request->get('name'));
         $this->subjectRepository->save($subject);
+
+        $this->addFlash('messages.success', sprintf('Pomyślnie dodano przedmiot <b>%s</b>.', $subject->getName()));
 
         return $this->redirectToRoute('admin.timetable.subject.list');
     }
@@ -396,6 +403,8 @@ class TimetableController extends Controller
         $subject->setName($request->get('name'));
         $this->subjectRepository->save($subject);
 
+        $this->addFlash('messages.success', sprintf('Pomyślnie zaktualizowano przedmiot <b>%s</b>.', $subject->getName()));
+
         return $this->redirectToRoute('admin.timetable.subject.list');
     }
 
@@ -415,6 +424,8 @@ class TimetableController extends Controller
         }
 
         $this->subjectRepository->delete($subject);
+
+        $this->addFlash('messages.success', sprintf('Pomyślnie usunięto przedmiot <b>%s</b>.', $subject->getName()));
 
         return $this->redirectToRoute('admin.timetable.subject.list');
     }
