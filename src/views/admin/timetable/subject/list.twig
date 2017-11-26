@@ -51,7 +51,8 @@
 
             bootbox.confirm({
                 title: 'Usuwanie przedmiotu',
-                message: 'Czy na pewno chcesz usunąć przedmiot ' + $target.data('name') + '?',
+                message: '<p>Czy na pewno chcesz usunąć przedmiot ' + $target.data('name') + '?</p>' +
+                '<p class="mb-0">Usunie to wszystkie lekcje z tym przedmiotem</p>',
                 buttons: {
                     cancel: {
                         label: 'Zamknij',
