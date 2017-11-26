@@ -40,7 +40,7 @@ class SchoolClass
     /**
      * @var Lesson[]
      *
-     * @ORM\OneToMany(targetEntity="Lesson", mappedBy="class")
+     * @ORM\OneToMany(targetEntity="Lesson", mappedBy="class", cascade={"persist", "remove"})
      */
     private $lessons;
 
