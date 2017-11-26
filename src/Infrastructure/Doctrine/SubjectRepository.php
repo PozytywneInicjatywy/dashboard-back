@@ -45,4 +45,13 @@ class SubjectRepository extends EntityRepository implements DomainSubjectReposit
         $this->getEntityManager()->persist($subject);
         $this->getEntityManager()->flush();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function delete(Subject $subject): void
+    {
+        $this->getEntityManager()->remove($subject);
+        $this->getEntityManager()->flush();
+    }
 }

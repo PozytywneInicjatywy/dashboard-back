@@ -1,0 +1,30 @@
+{% extends '@admin/timetable/layout.twig' %}
+
+{% set activeTab = 'subjects' %}
+
+{% block timetableTitle %}
+    {% if subject is null %}
+        Dodaj nowy przedmiot
+    {% else %}
+        Edytuj przedmiot {{ subject.name }}
+    {% endif %}
+{% endblock %}
+
+{% block timetableMenu %}
+    <div class="btn-group">
+        <a href="{{ path('admin.timetable.subject.list') }}" class="btn btn-light">Powrót</a>
+    </div>
+{% endblock %}
+
+{% block timetableContent %}
+    <form action="{{ subject is null ? path('admin.timetable.subject.newPost') : path('admin.timetable.subject.editPost', {subject: subject.id}) }}" method="post">
+        {% if subject is not null %}
+            <input type="hidden" name="_method" value="PATCH">
+        {% endif %}
+        <div class="form-group">
+            <label for="name">Nazwa przedmiotu</label>
+            <input type="text" id="name" name="name" class="form-control" value="{{ subject.name|default }}" required>
+        </div>
+        <input type="submit" value="{{ subject is null ? 'Dodaj przedmiot' : 'Zaktualizuj przedmiot' }}" class="btn btn-primary">
+    </form>
+{% endblock %}

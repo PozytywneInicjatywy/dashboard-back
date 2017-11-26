@@ -1,0 +1,73 @@
+{% extends '@admin/timetable/layout.twig' %}
+
+{% set activeTab = 'subjects' %}
+
+{% block timetableTitle %}Przedmioty{% endblock %}
+
+{% block timetableMenu %}
+    <div class="btn-group">
+        <a href="{{ path('admin.timetable.subject.new') }}" class="btn btn-info">Dodaj nowy przedmiot</a>
+    </div>
+{% endblock %}
+
+{% block timetableContent %}
+    {% if subjects is not empty %}
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Nazwa przedmiotu</th>
+                <th>Akcje</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for subject in subjects %}
+                <tr>
+                    <td>{{ subject.id }}</td>
+                    <td>{{ subject.name }}</td>
+                    <td>
+                        <a href="{{ path('admin.timetable.subject.edit', {subject: subject.id}) }}" class="text-info">Edytuj</a>
+                        <form action="{{ path('admin.timetable.subject.delete', {subject: subject.id}) }}" method="post" class="d-inline">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="submit" value="Usuń" data-name="{{ subject.name }}"
+                                   class="btn btn-link p-0 border-0 align-baseline ml-3 text-danger deleteButton">
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="alert alert-warning">Nie ma żadnych przedmiotów!</p>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.rawgit.com/tiesont/bootbox/v5.x/src/bootbox.js"></script>
+    <script>
+        $(document).on('click', '.deleteButton', function (e) {
+            e.preventDefault();
+            var $target = $(e.target);
+
+            bootbox.confirm({
+                title: 'Usuwanie przedmiotu',
+                message: 'Czy na pewno chcesz usunąć przedmiot ' + $target.data('name') + '?',
+                buttons: {
+                    cancel: {
+                        label: 'Zamknij',
+                        className: 'btn-secondary order-2 ml-2'
+                    },
+                    confirm: {
+                        label: 'Usuń przedmiot',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        $target.closest('form').submit();
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

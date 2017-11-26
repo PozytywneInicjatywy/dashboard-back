@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PozytywneInicjatywy\Dashboard\Domain;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -28,6 +29,18 @@ class Subject
     private $name;
 
     /**
+     * @var Lesson[]
+     *
+     * @ORM\OneToMany(targetEntity="Lesson", mappedBy="subject", cascade={"remove"})
+     */
+    private $lessons;
+
+    public function __construct()
+    {
+        $this->lessons = new ArrayCollection();
+    }
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -49,5 +62,21 @@ class Subject
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return Lesson[]
+     */
+    public function getLessons(): array
+    {
+        return $this->lessons;
+    }
+
+    /**
+     * @param Lesson $lesson
+     */
+    public function addLesson(Lesson $lesson): void
+    {
+        $this->lessons->add($lesson);
     }
 }

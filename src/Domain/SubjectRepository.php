@@ -26,4 +26,9 @@ interface SubjectRepository
      * @param Subject $subject
      */
     public function save(Subject $subject): void;
+
+    /**
+     * @param Subject $subject
+     */
+    public function delete(Subject $subject): void;
 }

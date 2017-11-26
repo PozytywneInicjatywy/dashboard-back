@@ -24,7 +24,7 @@ class Lesson
     /**
      * @var Subject
      *
-     * @ORM\ManyToOne(targetEntity="Subject")
+     * @ORM\ManyToOne(targetEntity="Subject", inversedBy="lessons")
      */
     private $subject;
 

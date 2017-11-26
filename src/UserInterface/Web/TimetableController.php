@@ -228,7 +228,7 @@ class TimetableController extends Controller
      */
     public function newClassPost(Request $request): Response
     {
-        // Validation stuff
+        // TODO: Validation stuff
 
         $class = new SchoolClass();
         $class->setDisplayName($request->get('displayName'));
@@ -273,7 +273,7 @@ class TimetableController extends Controller
             throw $this->createNotFoundException();
         }
 
-        // Validation stuff
+        // TODO: Validation stuff
 
         $class->setDisplayName($request->get('displayName'));
         $class->setName($request->get('name'));
@@ -312,9 +312,9 @@ class TimetableController extends Controller
      */
     public function listSubjects(Request $request): Response
     {
-        if (in_array('application/json', $request->getAcceptableContentTypes())) {
-            $subjects = $this->subjectRepository->all();
+        $subjects = $this->subjectRepository->all();
 
+        if (in_array('application/json', $request->getAcceptableContentTypes())) {
             $resultSubjects = [];
             foreach ($subjects as $subject) {
                 $resultSubjects[] = [
@@ -326,6 +326,96 @@ class TimetableController extends Controller
             return $this->json(['subjects' => $resultSubjects]);
         }
 
-        return new Response('', Response::HTTP_NOT_IMPLEMENTED);
+        return $this->render('@admin/timetable/subject/list.twig', ['subjects' => $subjects]);
+    }
+
+    /**
+     * GET /admin/timetable/subject/new
+     *
+     * @return Response
+     */
+    public function newSubject(): Response
+    {
+        return $this->render('@admin/timetable/subject/form.twig', ['subject' => null]);
+    }
+
+    /**
+     * POST /admin/timetable/subject
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function newSubjectPost(Request $request): Response
+    {
+        // TODO: Validation stuff
+
+        $subject = new Subject();
+        $subject->setName($request->get('name'));
+        $this->subjectRepository->save($subject);
+
+        return $this->redirectToRoute('admin.timetable.subject.list');
+    }
+
+    /**
+     * GET /admin/timetable/subject/{subject}
+     *
+     * @param string $subject
+     *
+     * @return Response
+     */
+    public function editSubject(string $subject): Response
+    {
+        try {
+            $subject = $this->subjectRepository->byId(intval($subject));
+        } catch (SubjectNotFoundException $e) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->render('@admin/timetable/subject/form.twig', ['subject' => $subject]);
+    }
+
+    /**
+     * PATCH /admin/timetable/subject/{subject}
+     *
+     * @param Request $request
+     * @param string $subject
+     *
+     * @return Response
+     */
+    public function editSubjectPost(Request $request, string $subject): Response
+    {
+        try {
+            $subject = $this->subjectRepository->byId(intval($subject));
+        } catch (SubjectNotFoundException $e) {
+            throw $this->createNotFoundException();
+        }
+
+        // TODO: Validation stuff
+
+        $subject->setName($request->get('name'));
+        $this->subjectRepository->save($subject);
+
+        return $this->redirectToRoute('admin.timetable.subject.list');
+    }
+
+    /**
+     * DELETE /admin/timetable/subject/{subject}
+     *
+     * @param string $subject
+     *
+     * @return Response
+     */
+    public function deleteSubject(string $subject): Response
+    {
+        try {
+            $subject = $this->subjectRepository->byId(intval($subject));
+        } catch (SubjectNotFoundException $e) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->subjectRepository->delete($subject);
+
+        return $this->redirectToRoute('admin.timetable.subject.list');
     }
 }

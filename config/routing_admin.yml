@@ -41,6 +41,31 @@ admin.timetable.subject.list:
   methods: [GET]
   defaults: { _controller: 'controller.web.timetable:listSubjects' }
 
+admin.timetable.subject.new:
+  path: /timetable/subject/new
+  methods: [GET]
+  defaults: { _controller: 'controller.web.timetable:newSubject' }
+
+admin.timetable.subject.newPost:
+  path: /timetable/subject
+  methods: [POST]
+  defaults: { _controller: 'controller.web.timetable:newSubjectPost' }
+
+admin.timetable.subject.edit:
+  path: /timetable/subject/{subject}
+  methods: [GET]
+  defaults: { _controller: 'controller.web.timetable:editSubject' }
+
+admin.timetable.subject.editPost:
+  path: /timetable/subject/{subject}
+  methods: [PATCH]
+  defaults: { _controller: 'controller.web.timetable:editSubjectPost' }
+
+admin.timetable.subject.delete:
+  path: /timetable/subject/{subject}
+  methods: [DELETE]
+  defaults: { _controller: 'controller.web.timetable:deleteSubject' }
+
 admin.timetable.editTimetable:
   path: /timetable/{class}
   methods: [GET]
