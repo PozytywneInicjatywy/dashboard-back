@@ -1,0 +1,34 @@
+{% extends '@admin/timetable/layout.twig' %}
+
+{% set activeTab = 'classes' %}
+
+{% block timetableTitle %}
+    {% if class is null %}
+        Dodaj nową klasę
+    {% else %}
+        Edytuj klasę {{ class.displayName }}
+    {% endif %}
+{% endblock %}
+
+{% block timetableMenu %}
+    <div class="btn-group">
+        <a href="{{ path('admin.timetable.class.list') }}" class="btn btn-light">Powrót</a>
+    </div>
+{% endblock %}
+
+{% block timetableContent %}
+    <form action="{{ class is null ? path('admin.timetable.class.newPost') : path('admin.timetable.class.editPost', {class: class.id}) }}" method="post">
+        {% if class is not null %}
+            <input type="hidden" name="_method" value="PATCH">
+        {% endif %}
+        <div class="form-group">
+            <label for="displayName">Nazwa wyświetlana klasy</label>
+            <input type="text" id="displayName" name="displayName" class="form-control" value="{{ class.displayName|default }}" required>
+        </div>
+        <div class="form-group">
+            <label for="name"><em>Techniczna</em> nazwa klasy</label>
+            <input type="text" id="name" name="name" class="form-control" value="{{ class.name|default }}" required>
+        </div>
+        <input type="submit" value="{{ class is null ? 'Dodaj klasę' : 'Zaktualizuj klasę' }}" class="btn btn-primary">
+    </form>
+{% endblock %}

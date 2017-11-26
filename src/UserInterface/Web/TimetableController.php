@@ -12,6 +12,7 @@ use PozytywneInicjatywy\Dashboard\Domain\Exception\SubjectNotFoundException;
 use PozytywneInicjatywy\Dashboard\Domain\Lesson;
 use PozytywneInicjatywy\Dashboard\Domain\LessonHourRepository;
 use PozytywneInicjatywy\Dashboard\Domain\LessonRepository;
+use PozytywneInicjatywy\Dashboard\Domain\SchoolClass;
 use PozytywneInicjatywy\Dashboard\Domain\SchoolClassRepository;
 use PozytywneInicjatywy\Dashboard\Domain\Subject;
 use PozytywneInicjatywy\Dashboard\Domain\SubjectRepository;
@@ -100,32 +101,6 @@ class TimetableController extends Controller
             'class' => $class,
             'lessonHours' => $lessonHours
         ]);
-    }
-
-    /**
-     * GET /admin/timetable/subject
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function listSubjects(Request $request): Response
-    {
-        if (in_array('application/json', $request->getAcceptableContentTypes())) {
-            $subjects = $this->subjectRepository->all();
-
-            $resultSubjects = [];
-            foreach ($subjects as $subject) {
-                $resultSubjects[] = [
-                    'id' => $subject->getId(),
-                    'name' => $subject->getName()
-                ];
-            };
-
-            return $this->json(['subjects' => $resultSubjects]);
-        }
-
-        return new Response('', Response::HTTP_NOT_IMPLEMENTED);
     }
 
     /**
@@ -220,5 +195,137 @@ class TimetableController extends Controller
                 'lessonHour' => $lessonHour
             ])
         ], Response::HTTP_OK);
+    }
+
+    /**
+     * GET /admin/timetable/class
+     *
+     * @return Response
+     */
+    public function listClasses(): Response
+    {
+        $classes = $this->classRepository->all();
+
+        return $this->render('@admin/timetable/class/list.twig', ['classes' => $classes]);
+    }
+
+    /**
+     * GET /admin/timetable/class/new
+     *
+     * @return Response
+     */
+    public function newClass(): Response
+    {
+        return $this->render('@admin/timetable/class/form.twig', ['class' => null]);
+    }
+
+    /**
+     * POST /admin/timetable/class
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function newClassPost(Request $request): Response
+    {
+        // Validation stuff
+
+        $class = new SchoolClass();
+        $class->setDisplayName($request->get('displayName'));
+        $class->setName($request->get('name'));
+
+        $this->classRepository->save($class);
+
+        return $this->redirectToRoute('admin.timetable.class.list');
+    }
+
+    /**
+     * GET /admin/timetable/class/{class}
+     *
+     * @param string $class
+     *
+     * @return Response
+     */
+    public function editClass(string $class): Response
+    {
+        try {
+            $class = $this->classRepository->byId(intval($class));
+        } catch (SchoolClassNotFoundException $e) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->render('@admin/timetable/class/form.twig', ['class' => $class]);
+    }
+
+    /**
+     * PATCH /admin/timetable/class/{class}
+     *
+     * @param Request $request
+     * @param string $class
+     *
+     * @return Response
+     */
+    public function editClassPost(Request $request, string $class): Response
+    {
+        try {
+            $class = $this->classRepository->byId(intval($class));
+        } catch (SchoolClassNotFoundException $e) {
+            throw $this->createNotFoundException();
+        }
+
+        // Validation stuff
+
+        $class->setDisplayName($request->get('displayName'));
+        $class->setName($request->get('name'));
+
+        $this->classRepository->save($class);
+
+        return $this->redirectToRoute('admin.timetable.class.list');
+    }
+
+    /**
+     * DELETE /admin/timetable/class/{class}
+     *
+     * @param string $class
+     *
+     * @return Response
+     */
+    public function deleteClass(string $class): Response
+    {
+        try {
+            $class = $this->classRepository->byId(intval($class));
+        } catch (SchoolClassNotFoundException $e) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->classRepository->delete($class);
+
+        return $this->redirectToRoute('admin.timetable.class.list');
+    }
+
+    /**
+     * GET /admin/timetable/subject
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function listSubjects(Request $request): Response
+    {
+        if (in_array('application/json', $request->getAcceptableContentTypes())) {
+            $subjects = $this->subjectRepository->all();
+
+            $resultSubjects = [];
+            foreach ($subjects as $subject) {
+                $resultSubjects[] = [
+                    'id' => $subject->getId(),
+                    'name' => $subject->getName()
+                ];
+            };
+
+            return $this->json(['subjects' => $resultSubjects]);
+        }
+
+        return new Response('', Response::HTTP_NOT_IMPLEMENTED);
     }
 }

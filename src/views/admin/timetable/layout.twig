@@ -9,8 +9,8 @@
         {% block timetableMenu '' %}
         <div class="btn-group ml-3">
             <a href="{{ path('admin.timetable.home') }}" class="btn btn-{{ activeTab == 'timetables' ? 'primary' : 'light' }}">Plany lekcji</a>
+            <a href="{{ path('admin.timetable.class.list') }}" class="btn btn-{{ activeTab == 'classes' ? 'primary' : 'light' }}">Klasy</a>
             <a href="#" class="btn btn-{{ activeTab == 'subjects' ? 'primary' : 'light' }}">Przedmioty</a>
-            <a href="#" class="btn btn-{{ activeTab == 'classes' ? 'primary' : 'light' }}">Klasy</a>
             <a href="#" class="btn btn-{{ activeTab == 'lesson hours' ? 'primary' : 'light' }}">Godziny lekcyjne</a>
         </div>
     </div>

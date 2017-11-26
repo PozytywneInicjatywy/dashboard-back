@@ -1,12 +1,18 @@
 {% extends '@admin/timetable/layout.twig' %}
 
-{% set activeTab = '' %}
+{% set activeTab = 'timetables' %}
 
 {% block timetableTitle %}Edytuj plan lekcji klasy {{ class.displayName }}{% endblock %}
 
+{% block timetableMenu %}
+    <div class="btn-group">
+        <a href="{{ path('admin.timetable.home') }}" class="btn btn-light">Powrót</a>
+    </div>
+{% endblock %}
+
 {% set lessonId = 1 %}
 {% block timetableContent %}
-    <table class="table mb-4 lessonsTable">
+    <table class="table table-striped lessonsTable">
         <thead>
         <tr>
             <th></th>

@@ -2,19 +2,13 @@
 
 {% set activeTab = 'timetables' %}
 
-{% block timetableMenu %}
-    <div class="btn-group">
-        <a href="#" class="btn btn-info">Dodaj nową klasę</a>
-    </div>
-{% endblock %}
-
 {% block timetableContent %}
     {% for class in classes %}
         <div class="d-flex align-items-start mb-3">
             <h3 class="h4">{{ class.displayName }}</h3>
             <a href="{{ path('admin.timetable.editTimetable', {class: class.name}) }}" class="btn btn-sm btn-outline-info ml-4">Edytuj</a>
         </div>
-        <table class="table mb-4">
+        <table class="table mb-4 table-striped">
             <thead>
                 <tr>
                     <th></th>
@@ -44,6 +38,6 @@
             </tbody>
         </table>
     {% else %}
-        <p class="alert alert-warning">Nie ma żadnych klas!</p>
+        <p class="alert alert-warning">Nie ma żadnych klas do wyświetlenia planów lekcji!</p>
     {% endfor %}
 {% endblock %}

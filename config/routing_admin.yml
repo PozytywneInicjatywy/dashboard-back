@@ -6,6 +6,36 @@ admin.timetable.home:
   methods: [GET]
   defaults: { _controller: 'controller.web.timetable:home' }
 
+admin.timetable.class.list:
+  path: /timetable/class
+  methods: [GET]
+  defaults: { _controller: 'controller.web.timetable:listClasses' }
+
+admin.timetable.class.new:
+  path: /timetable/class/new
+  methods: [GET]
+  defaults: { _controller: 'controller.web.timetable:newClass' }
+
+admin.timetable.class.newPost:
+  path: /timetable/class
+  methods: [POST]
+  defaults: { _controller: 'controller.web.timetable:newClassPost' }
+
+admin.timetable.class.edit:
+  path: /timetable/class/{class}
+  methods: [GET]
+  defaults: { _controller: 'controller.web.timetable:editClass' }
+
+admin.timetable.class.editPost:
+  path: /timetable/class/{class}
+  methods: [PATCH]
+  defaults: { _controller: 'controller.web.timetable:editClassPost' }
+
+admin.timetable.class.delete:
+  path: /timetable/class/{class}
+  methods: [DELETE]
+  defaults: { _controller: 'controller.web.timetable:deleteClass' }
+
 admin.timetable.subject.list:
   path: /timetable/subject
   methods: [GET]

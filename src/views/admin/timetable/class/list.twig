@@ -1,0 +1,75 @@
+{% extends '@admin/timetable/layout.twig' %}
+
+{% set activeTab = 'classes' %}
+
+{% block timetableTitle %}Klasy{% endblock %}
+
+{% block timetableMenu %}
+    <div class="btn-group">
+        <a href="{{ path('admin.timetable.class.new') }}" class="btn btn-info">Dodaj nową klasę</a>
+    </div>
+{% endblock %}
+
+{% block timetableContent %}
+    {% if classes is not empty %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nazwa wyświetlana klasy</th>
+                    <th><em>Techniczna</em> nazwa klasy</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for class in classes %}
+                    <tr>
+                        <td>{{ class.id }}</td>
+                        <td>{{ class.displayName }}</td>
+                        <td>{{ class.name }}</td>
+                        <td>
+                            <a href="{{ path('admin.timetable.class.edit', {class: class.id}) }}" class="text-info">Edytuj</a>
+                            <form action="{{ path('admin.timetable.class.delete', {class: class.id}) }}" method="post" class="d-inline">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="submit" value="Usuń" data-name="{{ class.displayName }}"
+                                    class="btn btn-link p-0 border-0 align-baseline ml-3 text-danger deleteButton">
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="alert alert-warning">Nie ma żadnych klas!</p>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.rawgit.com/tiesont/bootbox/v5.x/src/bootbox.js"></script>
+    <script>
+        $(document).on('click', '.deleteButton', function (e) {
+            e.preventDefault();
+            var $target = $(e.target);
+
+            bootbox.confirm({
+                title: 'Usuwanie klasy',
+                message: 'Czy na pewno chcesz usunąć klasę ' + $target.data('name') + '?',
+                buttons: {
+                    cancel: {
+                        label: 'Zamknij',
+                        className: 'btn-secondary order-2 ml-2'
+                    },
+                    confirm: {
+                        label: 'Usuń klasę',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        $target.closest('form').submit();
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

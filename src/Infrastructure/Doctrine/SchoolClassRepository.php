@@ -6,6 +6,7 @@ namespace PozytywneInicjatywy\Dashboard\Infrastructure\Doctrine;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use PozytywneInicjatywy\Dashboard\Domain\Exception;
 use PozytywneInicjatywy\Dashboard\Domain\Exception\SchoolClassNotFoundException;
 use PozytywneInicjatywy\Dashboard\Domain\Lesson;
 use PozytywneInicjatywy\Dashboard\Domain\LessonHour;
@@ -21,11 +22,29 @@ class SchoolClassRepository extends EntityRepository implements DomainSchoolClas
     private $lessonHourRepository;
 
     /**
-     * @param LessonHourRepository $lessonHourRepository
+     * {@inheritdoc}
      */
     public function setLessonHourRepository(LessonHourRepository $lessonHourRepository): void
     {
         $this->lessonHourRepository = $lessonHourRepository;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function byId(int $id): SchoolClass
+    {
+        /** @var SchoolClass|null $class */
+        $class = $this->find($id);
+
+        if (null === $class) {
+            throw new SchoolClassNotFoundException(sprintf(
+                'Class with id %d does not exist.',
+                $id
+            ));
+        }
+
+        return $class;
     }
 
     /**
@@ -45,7 +64,10 @@ class SchoolClassRepository extends EntityRepository implements DomainSchoolClas
             ->getOneOrNullResult();
 
         if (null === $class) {
-            throw new SchoolClassNotFoundException();
+            throw new SchoolClassNotFoundException(sprintf(
+                'Class with name \'%s\' does not exist.',
+                $name
+            ));
         }
 
         $lessonHours = $this->lessonHourRepository->all();
@@ -112,5 +134,23 @@ class SchoolClassRepository extends EntityRepository implements DomainSchoolClas
         }
 
         $class->setMappedLessons($array);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function save(SchoolClass $class): void
+    {
+        $this->getEntityManager()->persist($class);
+        $this->getEntityManager()->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function delete(SchoolClass $class): void
+    {
+        $this->getEntityManager()->remove($class);
+        $this->getEntityManager()->flush();
     }
 }
