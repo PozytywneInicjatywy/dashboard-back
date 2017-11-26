@@ -1,0 +1,34 @@
+{% extends '@admin/timetable/layout.twig' %}
+
+{% set activeTab = 'lesson hours' %}
+
+{% block timetableTitle %}
+    {% if lessonHour is null %}
+        Dodaj nową godzinę lekcyjną
+    {% else %}
+        Edytuj godzinę lekcyjną
+    {% endif %}
+{% endblock %}
+
+{% block timetableMenu %}
+    <div class="btn-group">
+        <a href="{{ path('admin.timetable.lessonHour.list') }}" class="btn btn-light">Powrót</a>
+    </div>
+{% endblock %}
+
+{% block timetableContent %}
+    <form action="{{ lessonHour is null ? path('admin.timetable.lessonHour.newPost') : path('admin.timetable.lessonHour.editPost', {lessonHour: lessonHour.id}) }}" method="post">
+        {% if lessonHour is not null %}
+            <input type="hidden" name="_method" value="PATCH">
+        {% endif %}
+        <div class="form-group">
+            <label for="startsAt">Początek godziny lekcyjnej</label>
+            <input type="time" id="startsAt" name="startsAt" class="form-control" value="{{ lessonHour.startsAt|default|date('H:i') }}" required>
+        </div>
+        <div class="form-group">
+            <label for="endsAt">Początek godziny lekcyjnej</label>
+            <input type="time" id="endsAt" name="endsAt" class="form-control" value="{{ lessonHour.endsAt|default|date('H:i') }}" required>
+        </div>
+        <input type="submit" value="{{ lessonHour is null ? 'Dodaj godzinę lekcyjną' : 'Zaktualizuj godzinę lekcyjną' }}" class="btn btn-primary">
+    </form>
+{% endblock %}

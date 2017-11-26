@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace PozytywneInicjatywy\Dashboard\UserInterface\Web;
 
+use DateTime;
 use PozytywneInicjatywy\Dashboard\Domain\Exception\LessonHourNotFoundException;
 use PozytywneInicjatywy\Dashboard\Domain\Exception\LessonNotFoundException;
 use PozytywneInicjatywy\Dashboard\Domain\Exception\NotFoundException;
 use PozytywneInicjatywy\Dashboard\Domain\Exception\SchoolClassNotFoundException;
 use PozytywneInicjatywy\Dashboard\Domain\Exception\SubjectNotFoundException;
 use PozytywneInicjatywy\Dashboard\Domain\Lesson;
+use PozytywneInicjatywy\Dashboard\Domain\LessonHour;
 use PozytywneInicjatywy\Dashboard\Domain\LessonHourRepository;
 use PozytywneInicjatywy\Dashboard\Domain\LessonRepository;
 use PozytywneInicjatywy\Dashboard\Domain\SchoolClass;
@@ -351,7 +353,7 @@ class TimetableController extends Controller
      *
      * @return Response
      */
-    public function newSubjectPost(Request $request, Session $session): Response
+    public function newSubjectPost(Request $request): Response
     {
         // TODO: Validation stuff
 
@@ -428,5 +430,123 @@ class TimetableController extends Controller
         $this->addFlash('messages.success', sprintf('Pomyślnie usunięto przedmiot <b>%s</b>.', $subject->getName()));
 
         return $this->redirectToRoute('admin.timetable.subject.list');
+    }
+
+    /**
+     * GET /admin/timetable/lesson-hour
+     *
+     * @return Response
+     */
+    public function listLessonHour(): Response
+    {
+        $lessonHours = $this->lessonHourRepository->all();
+
+        return $this->render('@admin/timetable/lesson_hour/list.twig', ['lessonHours' => $lessonHours]);
+    }
+
+    /**
+     * GET /admin/timetable/lesson-hour/new
+     *
+     * @return Response
+     */
+    public function newLessonHour(): Response
+    {
+        return $this->render('@admin/timetable/lesson_hour/form.twig', ['lessonHour' => null]);
+    }
+
+    /**
+     * POST /admin/timetable/lesson-hour
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function newLessonHourPost(Request $request): Response
+    {
+        // TODO: Validation stuff
+
+        $lessonHour = new LessonHour();
+        $lessonHour->setStartsAt(
+            DateTime::createFromFormat('H:i', $request->get('startsAt'))
+        );
+        $lessonHour->setEndsAt(
+            DateTime::createFromFormat('H:i', $request->get('endsAt'))
+        );
+        $this->lessonHourRepository->save($lessonHour);
+
+        $this->addFlash('messages.success', 'Pomyślnie dodano nową godzinę lekcyjną.');
+
+        return $this->redirectToRoute('admin.timetable.lessonHour.list');
+    }
+
+    /**
+     * GET /admin/timetable/lesson-hour/{lessonHour}
+     *
+     * @param string $lessonHour
+     *
+     * @return Response
+     */
+    public function editLessonHour(string $lessonHour): Response
+    {
+        try {
+            $lessonHour = $this->lessonHourRepository->byId(intval($lessonHour));
+        } catch (LessonHourNotFoundException $e) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->render('@admin/timetable/lesson_hour/form.twig', ['lessonHour' => $lessonHour]);
+    }
+
+    /**
+     * PATCH /admin/timetable/lesson-hour/{lessonHour}
+     *
+     * @param Request $request
+     * @param string $lessonHour
+     *
+     * @return Response
+     */
+    public function editLessonHourPost(Request $request, string $lessonHour): Response
+    {
+        try {
+            $lessonHour = $this->lessonHourRepository->byId(intval($lessonHour));
+        } catch (LessonHourNotFoundException $e) {
+            throw $this->createNotFoundException();
+        }
+
+        // TODO: Validation stuff
+
+        $lessonHour->setStartsAt(
+            DateTime::createFromFormat('H:i', $request->get('startsAt'))
+        );
+        $lessonHour->setEndsAt(
+            DateTime::createFromFormat('H:i', $request->get('endsAt'))
+        );
+        $this->lessonHourRepository->save($lessonHour);
+
+        $this->addFlash('messages.success', 'Pomyślnie zaktualizowano godzinę lekcyjną.');
+
+        return $this->redirectToRoute('admin.timetable.lessonHour.list');
+    }
+
+    /**
+     * DELETE /admin/timetable/lesson-hour/{lessonHour}
+     *
+     * @param string $lessonHour
+     *
+     * @return Response
+     */
+    public function deleteLessonHour(string $lessonHour): Response
+    {
+        try {
+            $lessonHour = $this->lessonHourRepository->byId(intval($lessonHour));
+        } catch (LessonHourNotFoundException $e) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->lessonHourRepository->delete($lessonHour);
+
+        $this->addFlash('messages.success', 'Pomyślnie usunięto godzinę lekcyjną.');
+
+        return $this->redirectToRoute('admin.timetable.lessonHour.list');
     }
 }

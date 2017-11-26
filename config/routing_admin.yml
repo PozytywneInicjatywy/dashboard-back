@@ -66,6 +66,36 @@ admin.timetable.subject.delete:
   methods: [DELETE]
   defaults: { _controller: 'controller.web.timetable:deleteSubject' }
 
+admin.timetable.lessonHour.list:
+  path: /timetable/lesson-hour
+  methods: [GET]
+  defaults: { _controller: 'controller.web.timetable:listLessonHour' }
+
+admin.timetable.lessonHour.new:
+  path: /timetable/lesson-hour/new
+  methods: [GET]
+  defaults: { _controller: 'controller.web.timetable:newLessonHour' }
+
+admin.timetable.lessonHour.newPost:
+  path: /timetable/lesson-hour
+  methods: [POST]
+  defaults: { _controller: 'controller.web.timetable:newLessonHourPost' }
+
+admin.timetable.lessonHour.edit:
+  path: /timetable/lesson-hour/{lessonHour}
+  methods: [GET]
+  defaults: { _controller: 'controller.web.timetable:editLessonHour' }
+
+admin.timetable.lessonHour.editPost:
+  path: /timetable/lesson-hour/{lessonHour}
+  methods: [PATCH]
+  defaults: { _controller: 'controller.web.timetable:editLessonHourPost' }
+
+admin.timetable.lessonHour.delete:
+  path: /timetable/lesson-hour/{lessonHour}
+  methods: [DELETE]
+  defaults: { _controller: 'controller.web.timetable:deleteLessonHour' }
+
 admin.timetable.editTimetable:
   path: /timetable/{class}
   methods: [GET]

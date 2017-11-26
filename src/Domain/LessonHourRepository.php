@@ -21,4 +21,14 @@ interface LessonHourRepository
      * @return array
      */
     public function all(): array;
+
+    /**
+     * @param LessonHour $lessonHour
+     */
+    public function save(LessonHour $lessonHour): void;
+
+    /**
+     * @param LessonHour $lessonHour
+     */
+    public function delete(LessonHour $lessonHour): void;
 }

@@ -1,0 +1,75 @@
+{% extends '@admin/timetable/layout.twig' %}
+
+{% set activeTab = 'lesson hours' %}
+
+{% block timetableTitle %}Godziny lekcyjne{% endblock %}
+
+{% block timetableMenu %}
+    <div class="btn-group">
+        <a href="{{ path('admin.timetable.lessonHour.new') }}" class="btn btn-info">Dodaj nową godzinę lekcyjną</a>
+    </div>
+{% endblock %}
+
+{% block timetableContent %}
+    {% if lessonHours is not empty %}
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Początek godziny lekcyjnej</th>
+                <th>Koniec godziny lekcyjnej</th>
+                <th>Akcje</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for lessonHour in lessonHours %}
+                <tr>
+                    <td>{{ lessonHour.id }}</td>
+                    <td>{{ lessonHour.startsAt|date('H:i') }}</td>
+                    <td>{{ lessonHour.endsAt|date('H:i') }}</td>
+                    <td>
+                        <a href="{{ path('admin.timetable.lessonHour.edit', {lessonHour: lessonHour.id}) }}" class="text-info">Edytuj</a>
+                        <form action="{{ path('admin.timetable.lessonHour.delete', {lessonHour: lessonHour.id}) }}" method="post" class="d-inline">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="submit" value="Usuń"
+                                   class="btn btn-link p-0 border-0 align-baseline ml-3 text-danger deleteButton">
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="alert alert-warning">Nie ma żadnych godzin lekcyjnych!</p>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.rawgit.com/tiesont/bootbox/v5.x/src/bootbox.js"></script>
+    <script>
+        $(document).on('click', '.deleteButton', function (e) {
+            e.preventDefault();
+            var $target = $(e.target);
+
+            bootbox.confirm({
+                title: 'Usuwanie godziny lekcyjnej',
+                message: 'Czy na pewno chcesz usunąć godzinę lekcyjną?',
+                buttons: {
+                    cancel: {
+                        label: 'Zamknij',
+                        className: 'btn-secondary order-2 ml-2'
+                    },
+                    confirm: {
+                        label: 'Usuń godzinę lekcyjną',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        $target.closest('form').submit();
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

@@ -37,4 +37,22 @@ class LessonHourRepository extends EntityRepository implements DomainLessonHourR
     {
         return $this->findAll();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function save(LessonHour $lessonHour): void
+    {
+        $this->getEntityManager()->persist($lessonHour);
+        $this->getEntityManager()->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function delete(LessonHour $lessonHour): void
+    {
+        $this->getEntityManager()->remove($lessonHour);
+        $this->getEntityManager()->flush();
+    }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PozytywneInicjatywy\Dashboard\Domain;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,6 +36,21 @@ class LessonHour
      * @ORM\Column(type="time")
      */
     private $endsAt;
+
+    /**
+     * @var Lesson[]
+     *
+     * @ORM\OneToMany(targetEntity="Lesson", mappedBy="lessonHour", cascade={"remove"})
+     */
+    private $lessons;
+
+    /**
+     * LessonHour constructor.
+     */
+    public function __construct()
+    {
+        $this->lessons = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -74,5 +90,21 @@ class LessonHour
     public function setEndsAt(DateTime $endsAt): void
     {
         $this->endsAt = $endsAt;
+    }
+
+    /**
+     * @return Lesson[]
+     */
+    public function getLessons(): array
+    {
+        return $this->lessons;
+    }
+
+    /**
+     * @param Lesson $lesson
+     */
+    public function addLesson(Lesson $lesson): void
+    {
+        $this->lessons->add($lesson);
     }
 }

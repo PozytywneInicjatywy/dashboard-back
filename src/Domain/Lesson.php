@@ -31,7 +31,7 @@ class Lesson
     /**
      * @var LessonHour
      *
-     * @ORM\ManyToOne(targetEntity="LessonHour")
+     * @ORM\ManyToOne(targetEntity="LessonHour", inversedBy="lessons")
      */
     private $lessonHour;
 
