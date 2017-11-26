@@ -14,5 +14,11 @@
             <a href="#" class="btn btn-{{ activeTab == 'lesson hours' ? 'primary' : 'light' }}">Godziny lekcyjne</a>
         </div>
     </div>
+    {% for message in app.flashes('messages.success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('messages.error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
     {% block timetableContent '' %}
 {% endblock %}
