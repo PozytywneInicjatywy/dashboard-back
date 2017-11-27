@@ -7,6 +7,7 @@ namespace PozytywneInicjatywy\Dashboard;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Bundle\WebProfilerBundle\WebProfilerBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -26,7 +27,8 @@ class Kernel extends SymfonyKernel
         $bundles = [
             new FrameworkBundle(),
             new TwigBundle(),
-            new DoctrineBundle()
+            new DoctrineBundle(),
+            new SecurityBundle()
         ];
 
         if ('dev' == $this->getEnvironment()) {
@@ -57,11 +59,17 @@ class Kernel extends SymfonyKernel
         $loader->load(dirname(__DIR__).'/config/config.yml');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getCacheDir()
     {
         return dirname(__DIR__).'/var/cache';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getLogDir()
     {
         return dirname(__DIR__) . '/var/logs';
