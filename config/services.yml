@@ -17,6 +17,10 @@ services:
         class: PozytywneInicjatywy\Dashboard\UserInterface\Api\TimetableController
         tags: ['controller.service_arguments']
 
+    controller.api.newsfeed:
+        class: PozytywneInicjatywy\Dashboard\UserInterface\Api\NewsfeedController
+        tags: ['controller.service_arguments']
+
     controller.web.timetable:
         class: PozytywneInicjatywy\Dashboard\UserInterface\Web\TimetableController
         tags: ['controller.service_arguments']

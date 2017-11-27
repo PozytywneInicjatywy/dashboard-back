@@ -50,7 +50,7 @@ class NewsRepository extends EntityRepository implements DomainNewsRepository
         return $this
             ->createQueryBuilder('n')
             ->select('n')
-            ->orderBy('n.publisedAt', 'DESC')
+            ->orderBy('n.publishedAt', 'DESC')
             ->setMaxResults($howMany)
             ->getQuery()
             ->getResult();

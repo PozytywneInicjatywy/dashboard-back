@@ -7,3 +7,8 @@ api.timetable:
   path: /timetable/{class}
   methods: [GET]
   defaults: { _controller: 'controller.api.timetable:fetch' }
+
+api.newsfeed:
+  path: /newsfeed/{howMany}
+  methods: [GET]
+  defaults: { _controller: 'controller.api.newsfeed:fetch' }
