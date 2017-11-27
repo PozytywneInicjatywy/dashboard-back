@@ -42,12 +42,12 @@ class News
      */
     private $publishedAt;
 
-//    /**
-//     * @var User
-//     *
-//     * @ORM\ManyToOne(targetEntity="User")
-//     */
-//    private $author;
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     */
+    private $author;
 
     /**
      * @return int

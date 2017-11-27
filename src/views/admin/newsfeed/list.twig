@@ -28,7 +28,7 @@
                         <td>{{ news.id }}</td>
                         <td>{{ news.title }}</td>
                         <td>{{ news.publishedAt|date('d-m-Y H:i') }}</td>
-                        <td>Autoreł</td>
+                        <td>{{ news.author.username }}</td>
                         <td>
                             <a href="{{ path('admin.newsfeed.edit', {news: news.id}) }}" class="text-info">Edytuj</a>
                             <form action="{{ path('admin.newsfeed.delete', {news: news.id}) }}" method="post" class="d-inline">

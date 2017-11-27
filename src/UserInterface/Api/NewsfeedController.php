@@ -43,7 +43,7 @@ class NewsfeedController extends Controller
                 'content' => $newsItem->getContent(),
                 'publishedAt' => $newsItem->getPublishedAt()->getTimestamp(),
                 'author' => [
-                    'username' => 'Gal Anonim' // FIXME: Return true author username.
+                    'username' => $newsItem->getAuthor()->getUsername()
                 ]
             ];
         }
