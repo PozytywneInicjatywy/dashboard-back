@@ -1,0 +1,77 @@
+{% extends '@admin/layout.twig' %}
+
+{% set active = 'newsfeed' %}
+{% set title = 'Kanał informacyjny' %}
+
+{% block content %}
+    <div class="d-flex align-items-baseline mb-4">
+        <h2 class="h3 mr-auto">Kanał informacyjny</h2>
+        <a href="{{ path('admin.newsfeed.new') }}" class="btn btn-info">Nowy news</a>
+    </div>
+    {% for message in app.session.flashBag.get('messages.success') %}
+        <div class="alert alert-success">{{ message|raw }}</div>
+    {% endfor %}
+    {% if newses is not empty %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Tytuł newsa</th>
+                    <th>Opublikowano</th>
+                    <th>Autor</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for news in newses %}
+                    <tr>
+                        <td>{{ news.id }}</td>
+                        <td>{{ news.title }}</td>
+                        <td>{{ news.publishedAt|date('d-m-Y H:i') }}</td>
+                        <td>Autoreł</td>
+                        <td>
+                            <a href="{{ path('admin.newsfeed.edit', {news: news.id}) }}" class="text-info">Edytuj</a>
+                            <form action="{{ path('admin.newsfeed.delete', {news: news.id}) }}" method="post" class="d-inline">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="submit" value="Usuń" data-name="{{ news.title }}"
+                                    class="btn btn-link p-0 border-0 align-baseline ml-3 text-danger deleteButton">
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="alert alert-warning">Nie ma żadnych newsów!</p>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.rawgit.com/tiesont/bootbox/v5.x/src/bootbox.js"></script>
+    <script>
+        $(document).on('click', '.deleteButton', function (e) {
+            e.preventDefault();
+            var $target = $(e.target);
+
+            bootbox.confirm({
+                title: 'Usuwanie newsa',
+                message: '<p>Czy na pewno chcesz usunąć newsa <b>' + $target.data('name') + '</b>?</p>',
+                buttons: {
+                    cancel: {
+                        label: 'Zamknij',
+                        className: 'btn-secondary order-2 ml-2'
+                    },
+                    confirm: {
+                        label: 'Usuń newsa',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        $target.closest('form').submit();
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

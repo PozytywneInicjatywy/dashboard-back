@@ -1,4 +1,37 @@
 #
+# Newsfeed
+#
+admin.newsfeed.home:
+  path: /newsfeed
+  methods: [GET]
+  defaults: { _controller: 'controller.web.newsfeed:home' }
+
+admin.newsfeed.new:
+  path: /newsfeed/new
+  methods: [GET]
+  defaults: { _controller: 'controller.web.newsfeed:new' }
+
+admin.newsfeed.newPost:
+  path: /newsfeed
+  methods: [POST]
+  defaults: { _controller: 'controller.web.newsfeed:newPost' }
+
+admin.newsfeed.edit:
+  path: /newsfeed/{news}
+  methods: [GET]
+  defaults: { _controller: 'controller.web.newsfeed:edit' }
+
+admin.newsfeed.editPost:
+  path: /newsfeed/{news}
+  methods: [PATCH]
+  defaults: { _controller: 'controller.web.newsfeed:editPost' }
+
+admin.newsfeed.delete:
+  path: /newsfeed/{news}
+  methods: [DELETE]
+  defaults: { _controller: 'controller.web.newsfeed:delete' }
+
+#
 # Timetable
 #
 admin.timetable.home:

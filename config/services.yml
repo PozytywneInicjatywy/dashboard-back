@@ -21,6 +21,10 @@ services:
         class: PozytywneInicjatywy\Dashboard\UserInterface\Web\TimetableController
         tags: ['controller.service_arguments']
 
+    controller.web.newsfeed:
+        class: PozytywneInicjatywy\Dashboard\UserInterface\Web\NewsfeedController
+        tags: ['controller.service_arguments']
+
     #
     # Repositories
     #
@@ -50,6 +54,12 @@ services:
       factory: 'Doctrine\ORM\EntityManagerInterface:getRepository'
       arguments:
           - PozytywneInicjatywy\Dashboard\Domain\Subject
+
+    repository.news:
+      class: PozytywneInicjatywy\Dashboard\Domain\NewsRepository
+      factory: 'Doctrine\ORM\EntityManagerInterface:getRepository'
+      arguments:
+          - PozytywneInicjatywy\Dashboard\Domain\News
 
     #
     # Query handlers
