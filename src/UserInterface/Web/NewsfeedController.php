@@ -68,7 +68,7 @@ class NewsfeedController extends Controller
         $news->setPublishedAt(new DateTime());
         $this->newsRepository->save($news);
 
-        $this->addFlash('message.success', sprintf('Pomyślnie dodano newsa <b>%s</b>.', $news->getTitle()));
+        $this->addFlash('messages.success', sprintf('Pomyślnie dodano newsa <b>%s</b>.', $news->getTitle()));
 
         return $this->redirectToRoute('admin.newsfeed.home');
     }
@@ -111,7 +111,7 @@ class NewsfeedController extends Controller
         $news->setContent($request->get('content'));
         $this->newsRepository->save($news);
 
-        $this->addFlash('message.success', sprintf('Pomyślnie zaktualizowano newsa <b>%s</b>.', $news->getTitle()));
+        $this->addFlash('messages.success', sprintf('Pomyślnie zaktualizowano newsa <b>%s</b>.', $news->getTitle()));
 
         return $this->redirectToRoute('admin.newsfeed.home');
     }
@@ -133,7 +133,7 @@ class NewsfeedController extends Controller
 
         $this->newsRepository->delete($news);
 
-        $this->addFlash('message.success', sprintf('Pomyślnie usunięto newsa <b>%s</b>.', $news->getTitle()));
+        $this->addFlash('messages.success', sprintf('Pomyślnie usunięto newsa <b>%s</b>.', $news->getTitle()));
 
         return $this->redirectToRoute('admin.newsfeed.home');
     }
