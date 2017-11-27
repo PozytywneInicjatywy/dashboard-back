@@ -8,6 +8,7 @@ framework:
         engines: ['twig']
     profiler: { only_exceptions: false }
     session: ~
+    csrf_protection: ~
 
 twig:
     debug: '%kernel.debug%'
@@ -36,6 +37,39 @@ doctrine:
                 dir:        '%kernel.project_dir%/src/Domain'
                 prefix:     'PozytywneInicjatywy\Dashboard\Domain'
                 alias:      Domain
+
+security:
+    encoders:
+        PozytywneInicjatywy\Dashboard\Domain\User: bcrypt
+
+    providers:
+        entity_provider:
+            entity:
+                class: PozytywneInicjatywy\Dashboard\Domain\User
+                property: username
+
+    firewalls:
+        main:
+            pattern: ^/admin
+            anonymous: ~
+
+            form_login:
+                login_path: /admin/login
+                check_path: /admin/login
+                default_target_path: /admin/newsfeed
+
+                username_parameter: username
+                password_parameter: password
+
+                csrf_token_generator: security.csrf.token_manager
+
+            logout:
+                path: /admin/logout
+                target: /admin/login
+
+    access_control:
+        - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin, roles: IS_AUTHENTICATED_REMEMBERED }
 
 web_profiler:
   toolbar: true

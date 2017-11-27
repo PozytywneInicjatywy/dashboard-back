@@ -1,4 +1,20 @@
 #
+# Security
+#
+admin.security.login:
+  path: /login
+  methods: [GET]
+  defaults: { _controller: 'controller.web.security:login' }
+
+admin.security.loginCheck:
+  path: /login
+  methods: [POST]
+
+admin.security.logout:
+  path: /logout
+  methods: [GET]
+
+#
 # Newsfeed
 #
 admin.newsfeed.home:

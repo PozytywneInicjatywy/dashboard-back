@@ -20,11 +20,11 @@
                     <span class="navbar-text pr-2" data-toggle="tooltip" data-placement="right" title="Commit: b6eca20">v1.0.0-alpha</span>
                     <div class="navbar-nav ml-auto">
                         <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">m.grzenkowicz</a>
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ app.user.username }}</a>
                             <div class="dropdown-menu dropdown-menu-right">
                               <a class="dropdown-item" href="#">Zmień hasło</a>
                                 <div class="dropdown-divider"></div>
-                              <a class="dropdown-item" href="#">Wyloguj się</a>
+                              <a class="dropdown-item" href="{{ path('admin.security.logout') }}">Wyloguj się</a>
                             </div>
                         </div>
                     </div>
