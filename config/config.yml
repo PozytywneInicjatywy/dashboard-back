@@ -69,12 +69,9 @@ security:
         - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, roles: IS_AUTHENTICATED_REMEMBERED }
 
-        - { path: ^/admin/user, roles: ROLE_ADMIN }
-        - { path: ^/admin/timetable, roles: ROLE_AUTHORIZED }
-
-    role_hierarchy:
-        ROLE_ADMIN: [ROLE_AUTHORIZED]
-        ROLE_AUTHORIZED: [ROLE_WRITER]
+        - { path: ^/admin/newsfeed, roles: PERM_NEWSFEED }
+        - { path: ^/admin/timetable, roles: PERM_TIMETABLE }
+        - { path: ^/admin/user, roles: PERM_USER }
 
 web_profiler:
   toolbar: true

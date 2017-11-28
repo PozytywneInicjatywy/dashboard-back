@@ -43,6 +43,13 @@ class User implements UserInterface
     private $password;
 
     /**
+     * @var array
+     *
+     * @ORM\Column(type="array")
+     */
+    private $roles = [];
+
+    /**
      * @return mixed
      */
     public function getId(): int
@@ -111,7 +118,15 @@ class User implements UserInterface
      */
     public function getRoles(): array
     {
-        return ['ROLE_ADMIN'];
+        return $this->roles;
+    }
+
+    /**
+     * @param array $roles
+     */
+    public function setRoles(array $roles): void
+    {
+        $this->roles = array_merge($roles, ['ROLE_USER']);
     }
 
     /**
