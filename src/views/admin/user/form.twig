@@ -36,7 +36,7 @@
         <div class="form-group">
             <label for="roles">Role</label>
             <select name="roles[]" id="roles" class="form-control" multiple required>
-                {% for role in ['PERM_TIMETABLE', 'PERM_NEWSFEED', 'PERM_USERS'] %}
+                {% for role in ['ROLE_TIMETABLE', 'ROLE_NEWSFEED', 'ROLE_USERS'] %}
                     <option value="{{ role }}" {{ role in user.roles ? 'selected' : '' }}>{{ role }}</option>
                 {% endfor %}
             </select>

@@ -34,13 +34,13 @@
                 <div class="row">
                     <nav class="col-md-2 border border-light border-top-0 border-bottom-0 border-left-0 p-4">
                         <div class="list-group">
-                            {% if is_granted('ROLE_WRITER') %}
+                            {% if is_granted('ROLE_NEWSFEED') %}
                                 <a href="{{ path('admin.newsfeed.home') }}" class="list-group-item list-group-item-action {{ active == 'newsfeed' ? 'active': '' }}">Kanał informacyjny</a>
                             {% endif %}
-                            {% if is_granted('ROLE_AUTHORIZED') %}
+                            {% if is_granted('ROLE_TIMETABLE') %}
                                 <a href="{{ path('admin.timetable.home') }}" class="list-group-item list-group-item-action {{ active == 'timetable' ? 'active': '' }}">Plany lekcji</a>
                             {% endif %}
-                            {% if is_granted('ROLE_ADMIN') %}
+                            {% if is_granted('ROLE_USERS') %}
                                 <a href="{{ path('admin.user.home') }}" class="list-group-item list-group-item-action {{ active == 'users' ? 'active': '' }}">Użytkownicy</a>
                             {% endif %}
                         </div>

@@ -67,11 +67,11 @@ security:
 
     access_control:
         - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin, roles: IS_AUTHENTICATED_REMEMBERED }
+        - { path: ^/admin/account, roles: IS_AUTHENTICATED_REMEMBERED }
 
-        - { path: ^/admin/newsfeed, roles: PERM_NEWSFEED }
-        - { path: ^/admin/timetable, roles: PERM_TIMETABLE }
-        - { path: ^/admin/user, roles: PERM_USER }
+        - { path: ^/admin/newsfeed, roles: ROLE_NEWSFEED }
+        - { path: ^/admin/timetable, roles: ROLE_TIMETABLE }
+        - { path: ^/admin/user, roles: ROLE_USERS }
 
 web_profiler:
   toolbar: true

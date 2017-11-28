@@ -27,13 +27,13 @@
                 <tr>
                     <td>{{ user.id }}</td>
                     <td>
-                        {% if 'PERM_USERS' in user.roles %}
+                        {% if 'ROLE_USERS' in user.roles %}
                             <span class="badge badge-danger">Użytkownicy</span>
                         {% endif %}
-                        {% if 'PERM_TIMETABLE' in user.roles %}
+                        {% if 'ROLE_TIMETABLE' in user.roles %}
                             <span class="badge badge-success">Plan lekcji</span>
                         {% endif %}
-                        {% if 'PERM_NEWSFEED' in user.roles %}
+                        {% if 'ROLE_NEWSFEED' in user.roles %}
                             <span class="badge badge-info">Kanał informacyjny</span>
                         {% endif %}
                     </td>

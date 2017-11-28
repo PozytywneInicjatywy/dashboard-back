@@ -10,6 +10,7 @@ use PozytywneInicjatywy\Dashboard\Domain\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class UserController extends Controller
@@ -100,7 +101,7 @@ class UserController extends Controller
      *
      * @return Response
      */
-    public function editPost(Request $request, string $user): Response
+    public function editPost(Request $request, string $user, EncoderFactoryInterface $encoderFactory): Response
     {
         try {
             $user = $this->userRepository->byId(intval($user));
@@ -108,18 +109,25 @@ class UserController extends Controller
             throw $this->createNotFoundException();
         }
 
+        $encoder = $encoderFactory->getEncoder(User::class);
+
         $user->setUsername($request->get('username'));
         $user->setEmail($request->get('email'));
 
-        if (null !== $request->get('password')) {
-            $user->setPassword($request->get('password'));
+        if ('' !== $request->get('password')) {
+            $user->setPassword(
+                $encoder->encodePassword($request->get('password'), '')
+            );
         }
 
         $user->setRoles($request->get('roles'));
 
         $this->userRepository->save($user);
 
-        $this->addFlash('messages.success', sprintf('Pomyślnie zaktualizowano użytkownika <b>%s</b>.', $user->getUsername()));
+        $this->addFlash('messages.success', sprintf(
+            'Pomyślnie zaktualizowano użytkownika <b>%s</b>.<br><br>Aby zmiana odniosła skutek, użytkownik musi się wylogować.',
+            $user->getUsername()
+        ));
 
         return $this->redirectToRoute('admin.user.home');
     }
