@@ -54,6 +54,11 @@ class FetchTimetableHandler
             ];
         }
 
+        $data = [
+            'className' => $class->getDisplayName(),
+            'timetable' => $data
+        ];
+
         return $data;
     }
 }

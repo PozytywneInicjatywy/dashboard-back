@@ -28,6 +28,6 @@ class TimetableController extends Controller
             return $this->json(['error' => 'Requested class does not exist.'], 404);
         }
 
-        return $this->json(['timetable' => $data]);
+        return $this->json($data);
     }
 }
