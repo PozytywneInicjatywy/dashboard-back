@@ -54,7 +54,7 @@ security:
             form_login:
                 login_path: /admin/login
                 check_path: /admin/login
-                default_target_path: /admin/newsfeed
+                default_target_path: /admin
 
                 username_parameter: username
                 password_parameter: password

@@ -34,6 +34,7 @@
                 <div class="row">
                     <nav class="col-md-2 border border-light border-top-0 border-bottom-0 border-left-0 p-4">
                         <div class="list-group">
+                            <a href="{{ path('admin.dashboard') }}" class="list-group-item list-group-item-action {{ active == 'dashboard' ? 'active' : '' }}">Pulpit</a>
                             {% if is_granted('ROLE_NEWSFEED') %}
                                 <a href="{{ path('admin.newsfeed.home') }}" class="list-group-item list-group-item-action {{ active == 'newsfeed' ? 'active': '' }}">Kanał informacyjny</a>
                             {% endif %}

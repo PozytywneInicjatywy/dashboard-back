@@ -1,4 +1,12 @@
 #
+# Account
+#
+admin.dashboard:
+  path: /
+  methods: [GET]
+  defaults: { _controller: 'controller.web.account:dashboard' }
+
+#
 # Security
 #
 admin.security.login:

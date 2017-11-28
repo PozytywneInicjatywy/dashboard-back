@@ -37,6 +37,10 @@ services:
         class: PozytywneInicjatywy\Dashboard\UserInterface\Web\UserController
         tags: ['controller.service_arguments']
 
+    controller.web.account:
+        class: PozytywneInicjatywy\Dashboard\UserInterface\Web\AccountController
+        tags: ['controller.service_arguments']
+
     #
     # Repositories
     #
