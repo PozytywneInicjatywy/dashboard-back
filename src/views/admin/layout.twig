@@ -35,10 +35,8 @@
                     <nav class="col-md-2 border border-light border-top-0 border-bottom-0 border-left-0 p-4">
                         <div class="list-group">
                             <a href="{{ path('admin.newsfeed.home') }}" class="list-group-item list-group-item-action {{ active == 'newsfeed' ? 'active': '' }}">Kanał informacyjny</a>
-                            <a href="{{ path('admin.timetable.home') }}" class="list-group-item list-group-item-action {{ active == 'timetable' ? 'active': '' }}">
-                                Plany lekcji
-                            </a>
-                            <a href="#" class="list-group-item list-group-item-action">Coś</a>
+                            <a href="{{ path('admin.timetable.home') }}" class="list-group-item list-group-item-action {{ active == 'timetable' ? 'active': '' }}">Plany lekcji</a>
+                            <a href="{{ path('admin.user.home') }}" class="list-group-item list-group-item-action {{ active == 'users' ? 'active': '' }} {{ active == 'timetable' ? 'active': '' }}">Użytkownicy</a>
                         </div>
                     </nav>
                     <main class="col p-4">

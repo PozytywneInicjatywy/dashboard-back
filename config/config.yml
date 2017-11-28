@@ -69,6 +69,13 @@ security:
         - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, roles: IS_AUTHENTICATED_REMEMBERED }
 
+        - { path: ^/admin/user, roles: ROLE_ADMIN }
+        - { path: ^/admin/timetable, roles: ROLE_AUTHORIZED }
+
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_AUTHORIZED]
+        ROLE_AUTHORIZED: [ROLE_WRITER]
+
 web_profiler:
   toolbar: true
   intercept_redirects: false

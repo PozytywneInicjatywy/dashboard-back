@@ -159,3 +159,36 @@ admin.timetable.deleteLesson:
   path: /timetable/{class}/{day}/{lessonHour}
   methods: [DELETE]
   defaults: { _controller: 'controller.web.timetable:deleteLesson' }
+
+#
+# User
+#
+admin.user.home:
+  path: /user
+  methods: [GET]
+  defaults: { _controller: 'controller.web.user:home' }
+
+admin.user.new:
+  path: /user/new
+  methods: [GET]
+  defaults: { _controller: 'controller.web.user:new' }
+
+admin.user.newPost:
+  path: /user
+  methods: [POST]
+  defaults: { _controller: 'controller.web.user:newPost' }
+
+admin.user.edit:
+  path: /user/{user}
+  methods: [GET]
+  defaults: { _controller: 'controller.web.user:edit' }
+
+admin.user.editPost:
+  path: /user/{user}
+  methods: [PATCH]
+  defaults: { _controller: 'controller.web.user:editPost' }
+
+admin.user.delete:
+  path: /user/{user}
+  methods: [DELETE]
+  defaults: { _controller: 'controller.web.user:delete' }

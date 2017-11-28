@@ -33,6 +33,10 @@ services:
         class: PozytywneInicjatywy\Dashboard\UserInterface\Web\NewsfeedController
         tags: ['controller.service_arguments']
 
+    controller.web.user:
+        class: PozytywneInicjatywy\Dashboard\UserInterface\Web\UserController
+        tags: ['controller.service_arguments']
+
     #
     # Repositories
     #

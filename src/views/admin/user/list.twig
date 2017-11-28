@@ -1,0 +1,85 @@
+{% extends '@admin/layout.twig' %}
+
+{% set active = 'users' %}
+{% set title = 'Użytkownicy' %}
+
+{% block content %}
+    <div class="d-flex align-items-baseline mb-4">
+        <h2 class="h3 mr-auto">Użytkownicy</h2>
+        <a href="{{ path('admin.user.new') }}" class="btn btn-info">Nowy użytkownik</a>
+    </div>
+    {% for message in app.session.flashBag.get('messages.success') %}
+        <div class="alert alert-success">{{ message|raw }}</div>
+    {% endfor %}
+    {% if users is not empty %}
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Rola</th>
+                <th>Nazwa użytkownika</th>
+                <th>Adres email</th>
+                <th>Akcje</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>
+                        {% if is_granted('ROLE_ADMIN', user) %}
+                            <span class="badge badge-danger" data-toggle="tooltip" title="Ma wszystkie uprawnienia">Admin</span>
+                        {% elseif is_granted('ROLE_AUTHORIZED', user) %}
+                            <span class="badge badge-success" data-toggle="tooltip" title="Może zarządzać każdą treścią">Uprawniony</span>
+                        {% elseif is_granted('ROLE_WRITER', user) %}
+                            <span class="badge badge-info" data-toggle="tooltip" title="Może zarządzać kanałem informacyjnym">Redaktor</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <a href="{{ path('admin.user.edit', {user: user.id}) }}" class="text-info">Edytuj</a>
+                        <form action="{{ path('admin.user.delete', {user: user.id}) }}" method="post" class="d-inline">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="submit" value="Usuń" data-name="{{ user.username }}"
+                                   class="btn btn-link p-0 border-0 align-baseline ml-3 text-danger deleteButton">
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="alert alert-warning">Nie ma żadnych userów!</p>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.rawgit.com/tiesont/bootbox/v5.x/src/bootbox.js"></script>
+    <script>
+        $(document).on('click', '.deleteButton', function (e) {
+            e.preventDefault();
+            var $target = $(e.target);
+
+            bootbox.confirm({
+                title: 'Usuwanie usera',
+                message: '<p>Czy na pewno chcesz usunąć użytkownika <b>' + $target.data('name') + '</b>?</p>',
+                buttons: {
+                    cancel: {
+                        label: 'Zamknij',
+                        className: 'btn-secondary order-2 ml-2'
+                    },
+                    confirm: {
+                        label: 'Usuń użytkownika',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        $target.closest('form').submit();
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}
