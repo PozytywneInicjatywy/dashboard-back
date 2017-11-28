@@ -19,6 +19,9 @@
         <a href="{{ path('admin.newsfeed.home') }}" class="btn btn-light">Powrót</a>
     </div>
     <form action="{{ news is null ? path('admin.newsfeed.newPost') : path('admin.newsfeed.editPost', {news: news.id}) }}" method="post">
+        {% if news is not null %}
+            <input type="hidden" name="_method" value="PATCH">
+        {% endif %}
         <div class="form-group">
             <label for="title">Tytuł newsa</label>
             <input type="text" id="title" name="title" class="form-control" value="{{ news.title|default }}" required>
