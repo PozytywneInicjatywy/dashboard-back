@@ -69,6 +69,12 @@ services:
       arguments:
           - PozytywneInicjatywy\Dashboard\Domain\News
 
+    repository.user:
+      class: PozytywneInicjatywy\Dashboard\Domain\UserRepository
+      factory: 'Doctrine\ORM\EntityManagerInterface:getRepository'
+      arguments:
+          - PozytywneInicjatywy\Dashboard\Domain\User
+
     #
     # Query handlers
     #

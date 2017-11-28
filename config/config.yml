@@ -44,9 +44,7 @@ security:
 
     providers:
         entity_provider:
-            entity:
-                class: PozytywneInicjatywy\Dashboard\Domain\User
-                property: username
+            id: repository.user
 
     firewalls:
         main:
