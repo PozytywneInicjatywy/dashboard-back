@@ -33,19 +33,21 @@
                 <li><code>4ti</code>
             </ul>
         <td><pre><code>{
-    "monday": {
-        2: {
-            "lesson": "Historia",
-            "room": "4"
+    "timetables":
+        1: {
+            2: {
+                "lesson": "Historia",
+                "room": "4"
+            },
+            3: {
+                "lesson": "Matematyka",
+                "room": "6"
+            },
+            (...)
         },
-        3: {
-            "lesson": "Matematyka",
-            "room": "6"
-        },
-        (...)
-    },
-    "tuesday": (...),
-    (...)    
+        2: (...),
+        (...)    
+    }
 }</code></pre>
         Hours without lessons must be left null.
     </tr>
@@ -58,7 +60,10 @@
     {
         "author": "Samorząd",
         "publishedAt": 1509986869,
-        "content": "Lorem ipsum..."
+        "content": "Lorem ipsum...",
+        "author": {
+            "username": "j.kowalski"
+        }
     },
     (...)
 ]</code></pre>
