@@ -66,6 +66,9 @@ class NewsfeedController extends Controller
         $news->setTitle($request->get('title'));
         $news->setContent($request->get('content'));
         $news->setPublishedAt(new DateTime());
+        $news->setAuthor(
+            $this->get('security.token_storage')->getToken()->getUser()
+        );
         $this->newsRepository->save($news);
 
         $this->addFlash('messages.success', sprintf('Pomyślnie dodano newsa <b>%s</b>.', $news->getTitle()));
