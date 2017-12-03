@@ -49,7 +49,7 @@ class FetchTimetableHandler
             }
 
             $data[$lesson->getDayOfWeek()][$lesson->getLessonHour()->getId()] = [
-                'name' => $lesson->getSubject()->getName(),
+                'lesson' => $lesson->getSubject()->getName(),
                 'room' => $lesson->getRoom()
             ];
         }
