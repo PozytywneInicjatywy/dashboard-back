@@ -74,7 +74,3 @@ security:
         - { path: ^/admin/newsfeed, roles: ROLE_NEWSFEED }
         - { path: ^/admin/timetable, roles: ROLE_TIMETABLE }
         - { path: ^/admin/user, roles: ROLE_USERS }
-
-web_profiler:
-  toolbar: true
-  intercept_redirects: false
