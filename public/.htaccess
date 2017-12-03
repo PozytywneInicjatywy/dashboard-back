@@ -1,1 +1,4 @@
+Order Allow, Deny
+Allow from All
+
 FallbackResource /index.php
