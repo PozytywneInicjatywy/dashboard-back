@@ -67,7 +67,7 @@ class UserController extends Controller
         $user->setUsername($request->get('username'));
         $user->setEmail($request->get('email'));
         $user->setPassword($request->get('password'));
-        $user->addRole('ROLE_WRITER');
+        $user->setRoles($request->get('roles'));
         $this->userRepository->save($user);
 
         $this->addFlash('messages.success', sprintf('Pomyślnie dodano użytkownika <b>%s</b>.', $user->getUsername()));
