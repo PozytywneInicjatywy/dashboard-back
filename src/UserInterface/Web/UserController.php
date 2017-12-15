@@ -56,17 +56,19 @@ class UserController extends Controller
      * POST /admin/user
      *
      * @param Request $request
+     * @param EncoderFactoryInterface $encoderFactory
      *
      * @return Response
      */
-    public function newPost(Request $request): Response
+    public function newPost(Request $request, EncoderFactoryInterface $encoderFactory): Response
     {
         // TODO: Validation stuff
-
         $user = new User();
         $user->setUsername($request->get('username'));
         $user->setEmail($request->get('email'));
-        $user->setPassword($request->get('password'));
+        $user->setPassword(
+            $encoderFactory->getEncoder(User::class)->encodePassword($request->get('password'), '')
+        );
         $user->setRoles($request->get('roles'));
         $this->userRepository->save($user);
 
@@ -98,6 +100,7 @@ class UserController extends Controller
      *
      * @param Request $request
      * @param string $user
+     * @param EncoderFactoryInterface $encoderFactory
      *
      * @return Response
      */
@@ -109,18 +112,15 @@ class UserController extends Controller
             throw $this->createNotFoundException();
         }
 
-        $encoder = $encoderFactory->getEncoder(User::class);
-
         $user->setUsername($request->get('username'));
         $user->setEmail($request->get('email'));
+        $user->setRoles($request->get('roles'));
 
-        if ('' !== $request->get('password')) {
+        if (!empty($request->get('password'))) {
             $user->setPassword(
-                $encoder->encodePassword($request->get('password'), '')
+                $encoderFactory->getEncoder(User::class)->encodePassword($request->get('password'), '')
             );
         }
-
-        $user->setRoles($request->get('roles'));
 
         $this->userRepository->save($user);
 
